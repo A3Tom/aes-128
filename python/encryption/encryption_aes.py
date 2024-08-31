@@ -1,36 +1,26 @@
-from helpers.block_operation_helper import BlockOperationHelper
 from encryption.encryption_base import EncryptionBase
 
 BLOCK_SIZE = 128
+ENCRYPTION_NAME = "AES"
 
 class AES(EncryptionBase):
-    __block_op_helper = BlockOperationHelper()
-
-    def __init__(self, key: int, print_debug: bool = True):
-        super().__init__(key, print_debug)
+    def __init__(self, key: int, mode_of_operation: str = 'EBC', print_debug: bool = True):
+        super().__init__(key, mode_of_operation, print_debug)
         self.__rounds = self.__calculate_encryption_rounds()
 
     def encrypt_message(self, message: str) -> list[bytes]:
-        message_blocks = self.__block_op_helper.parse_string_to_blocks(message, BLOCK_SIZE)
-        return self.encrypt(message_blocks)
-
-    def encrypt(self, blocks: list[bytes]) -> list[bytes]:
-        return [self.__encrypt_block(block) for block in blocks]
-    
-    def decrypt(self, blocks: list[bytes]) -> list[bytes]:
-        return [self.__decrypt_block(block) for block in blocks]
+        return super().encrypt_message(message, BLOCK_SIZE)
         
     def spout_name(self) -> str:
-        return "AES"
+        return ENCRYPTION_NAME
 
     def spout_block_size(self) -> str:
         return BLOCK_SIZE
 
-    
     # https://crypto.stackexchange.com/questions/20/what-are-the-practical-differences-between-256-bit-192-bit-and-128-bit-aes-enc/1527#1527
-    def __encrypt_block(self, block: bytes) -> bytes:
+    def _encrypt_block(self, block: bytes) -> bytes:
         # expanded_key = self.__key_expansion()
-        # block = self.__add_round_key()
+        # # block = self.__add_round_key()
 
         # for round in self.__rounds:
         #     round_key = round
@@ -45,7 +35,10 @@ class AES(EncryptionBase):
         #     pass
         
         return block ^ self.key
-    
+
+
+    def _decrypt_block(self, block: bytes) -> bytes:
+        return block ^ self.key
 
 
     def __key_expansion(self):
@@ -75,7 +68,4 @@ class AES(EncryptionBase):
 
 
 
-    
-    def __decrypt_block(self, block: bytes) -> bytes:
-        return block ^ self.key
     
