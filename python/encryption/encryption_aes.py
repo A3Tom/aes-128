@@ -1,0 +1,81 @@
+from helpers.block_operation_helper import BlockOperationHelper
+from encryption.encryption_base import EncryptionBase
+
+BLOCK_SIZE = 128
+
+class AES(EncryptionBase):
+    __block_op_helper = BlockOperationHelper()
+
+    def __init__(self, key: int, print_debug: bool = True):
+        super().__init__(key, print_debug)
+        self.__rounds = self.__calculate_encryption_rounds()
+
+    def encrypt_message(self, message: str) -> list[bytes]:
+        message_blocks = self.__block_op_helper.parse_string_to_blocks(message, BLOCK_SIZE)
+        return self.encrypt(message_blocks)
+
+    def encrypt(self, blocks: list[bytes]) -> list[bytes]:
+        return [self.__encrypt_block(block) for block in blocks]
+    
+    def decrypt(self, blocks: list[bytes]) -> list[bytes]:
+        return [self.__decrypt_block(block) for block in blocks]
+        
+    def spout_name(self) -> str:
+        return "AES"
+
+    def spout_block_size(self) -> str:
+        return BLOCK_SIZE
+
+    
+    # https://crypto.stackexchange.com/questions/20/what-are-the-practical-differences-between-256-bit-192-bit-and-128-bit-aes-enc/1527#1527
+    def __encrypt_block(self, block: bytes) -> bytes:
+        # expanded_key = self.__key_expansion()
+        # block = self.__add_round_key()
+
+        # for round in self.__rounds:
+        #     round_key = round
+
+        #     block = self.__sub_bytes()
+        #     block = self.__shift_rows()
+
+        #     if round != self.__rounds:
+        #         block = self.__mix_columns()
+            
+        #     block = self.__add_round_key(block, round_key)
+        #     pass
+        
+        return block ^ self.key
+    
+
+
+    def __key_expansion(self):
+        pass
+
+    def __add_round_key(self, block: bytes, round_key: bytes):
+        return block ^ round_key
+
+    def __sub_bytes(self, block: bytes):
+        return block
+
+    def __shift_rows(self, block: bytes):
+        return block
+
+    def __mix_columns(self, block: bytes):
+        return block
+
+
+    def __calculate_encryption_rounds(self) -> int:
+        match self.key_bit_size:
+            case 128: return 10
+            case 192: return 12
+            case 256: return 14
+            case _: raise Exception(f"Key size: {self.key_bit_size} is an invalid key size for AES, only 128, 192 and 256 are valid")
+
+
+
+
+
+    
+    def __decrypt_block(self, block: bytes) -> bytes:
+        return block ^ self.key
+    
