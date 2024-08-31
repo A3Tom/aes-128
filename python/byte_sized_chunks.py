@@ -7,8 +7,8 @@ parser.add_argument("-k", "--key", help="The integer value which forms the bitma
 parser.add_argument("-m", "--message", help="The message you want to encode")
 cli_args = vars(parser.parse_args())
 
-key = 0b11100011111000111110001111100011111000111110001111100011111000111110001111100011111000111110001111100011111000111110001111100011
-message = "Remoooo"
+key = 124124124312645747151512124124999286
+message = "Absolutely sound mate, nae worries at aw"
 
 message_arg = cli_args.get('message')
 key_arg = cli_args.get('key')
