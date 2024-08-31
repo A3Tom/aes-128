@@ -23,6 +23,10 @@ class BitOperationHelper():
         bitshifted_var = input >> shift_count
         missing_bits = input << (bit_amount - shift_count) & bit_cap_mask
         return bitshifted_var | missing_bits
+    
+    # mad props to https://iq.opengenus.org/addition-using-bitwise-operations/ what a belter
+    def bitwise_add(self, a: int, b: int) -> int:
+        return a if b == 0 else self.bitwise_add(a^b , (a&b) << 1)
 
     def get_next_base_2(self, var: int) -> int:
         var -= 1
