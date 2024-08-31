@@ -2,7 +2,6 @@ DEFAULT_WORD_SIZE = 8
 DEFAULT_ENDIANNESS = 'little'
 
 class BlockOperationHelper():
-    
     def parse_string_to_blocks(self, message: str, block_size: int) -> list[bytes]:
         chunk_size = block_size // DEFAULT_WORD_SIZE
         message_blocks = self.__build_default_chunks_array(message, chunk_size)
@@ -16,6 +15,10 @@ class BlockOperationHelper():
 
     def parse_blocks_to_string(self, chunk_array: list[bytes]) -> str:
         return ''.join([self.__parse_block_to_char_array(chunk) for chunk in chunk_array])
+    
+    # TODO
+    def expand_blocks(self, blocks: list[bytes], target_size: int) -> list[bytes]:
+        return blocks
 
     def __int_to_bytes(self, input: int, chunk_size: int) -> bytes:
         return input.to_bytes(chunk_size, DEFAULT_ENDIANNESS)

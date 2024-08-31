@@ -53,7 +53,7 @@ class EncryptionBase():
         
         for i, block in enumerate(blocks):
             block ^= vector
-            blocks[i - 1] = self._encrypt_block(block)
+            blocks[i] = self._encrypt_block(block)
             vector = block
 
         return blocks
@@ -83,7 +83,7 @@ class EncryptionBase():
         
         for i, block in enumerate(blocks):
             block ^= vector
-            blocks[i - 1] = self._decrypt_block(block)
+            blocks[i] = self._decrypt_block(block)
             vector = block
 
         return blocks
