@@ -45,6 +45,15 @@ class BlockOperationHelper():
     def int_to_bytes(self, input: int, chunk_size: int, endianness: str = DEFAULT_ENDIANNESS) -> bytes:
         return input.to_bytes(chunk_size, endianness)
 
+    def output_2d_array_hex(self, array):
+        print()
+        for i, col in enumerate(array):
+            row_output = ""
+            for j, byte in enumerate(col):
+                row_output += f"{byte:002X} " 
+                pass
+            print(row_output)
+
 
     def __build_byte_array_columns(self, array: list[list[bytes]], block: bytes) -> None:
         for col_idx in range(0, len(array)):
