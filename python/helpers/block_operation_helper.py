@@ -20,8 +20,8 @@ class BlockOperationHelper():
     def expand_blocks(self, blocks: list[bytes], target_size: int) -> list[bytes]:
         return blocks
 
-    def int_to_bytes(self, input: int, chunk_size: int) -> bytes:
-        return input.to_bytes(chunk_size, DEFAULT_ENDIANNESS)
+    def int_to_bytes(self, input: int, chunk_size: int, endianness: str = DEFAULT_ENDIANNESS) -> bytes:
+        return input.to_bytes(chunk_size, endianness)
     
     def __char_to_bitmask(self, char: str, bitmask_index: int) -> bytes:
         return (ord(char) << (bitmask_index) * DEFAULT_WORD_SIZE)
