@@ -7,8 +7,6 @@ class BitOperationHelper():
     def circular_shift_left(self, input: int, shift_count: int) -> int:
         bit_amount = self.__parse_input_bit_amount(input)
         bit_cap_mask = self.__parse_bit_cap_mask(bit_amount)
-        
-        print(f"Input: {input} bit amount: {bit_amount}")
 
         bitshifted_var = (input << shift_count) & bit_cap_mask
         missing_bits = input >> bit_amount - shift_count 
@@ -17,8 +15,6 @@ class BitOperationHelper():
     def circular_shift_right(self, input: int, shift_count: int) -> int:
         bit_amount = self.__parse_input_bit_amount(input)
         bit_cap_mask = self.__parse_bit_cap_mask(bit_amount)
-        
-        print(f"Input: {input} bit amount: {bit_amount}")
         
         bitshifted_var = input >> shift_count
         missing_bits = input << (bit_amount - shift_count) & bit_cap_mask

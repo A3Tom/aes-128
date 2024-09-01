@@ -1,5 +1,6 @@
-from helpers.block_operation_helper import BlockOperationHelper
+from helpers.bit_operation_helper import BitOperationHelper
 from helpers.sbox_operation_helper import SBoxOperationHelper
+from helpers.block_operation_helper import BlockOperationHelper
 
 DEFAULT_BLOCK_SIZE = 4
 DEFAULT_WORD_SIZE = 8
@@ -7,8 +8,9 @@ DEFAULT_ENDIANNESS = 'little'
 
 class EncryptionBase():
     def __init__(self, key: int, mode_of_operation: str = 'EBC', nonce: int = 0b0, print_debug: bool = True):
-        self.block_op_helper = BlockOperationHelper()
+        self.bit_op_helper = BitOperationHelper()
         self.sbox_op_helper = SBoxOperationHelper()
+        self.block_op_helper = BlockOperationHelper()
         
         self.key = key
         self.key_size = self.__get_key_size(key)
