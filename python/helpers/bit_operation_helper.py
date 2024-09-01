@@ -36,7 +36,7 @@ class BitOperationHelper():
         return var
 
     def __parse_input_bit_amount(self, input: int) -> int:
-        return self.__get_next_base_2(len(bin(input)[2:]))
+        return self.get_next_base_2(len(bin(input)[2:]))
 
     def __parse_bit_cap_mask(self, bitshift_amount: int) -> int:
         return pow(2, bitshift_amount) - 1

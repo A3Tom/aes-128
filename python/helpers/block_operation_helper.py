@@ -20,7 +20,7 @@ class BlockOperationHelper():
     def expand_blocks(self, blocks: list[bytes], target_size: int) -> list[bytes]:
         return blocks
 
-    def __int_to_bytes(self, input: int, chunk_size: int) -> bytes:
+    def int_to_bytes(self, input: int, chunk_size: int) -> bytes:
         return input.to_bytes(chunk_size, DEFAULT_ENDIANNESS)
     
     def __char_to_bitmask(self, char: str, bitmask_index: int) -> bytes:
@@ -30,5 +30,5 @@ class BlockOperationHelper():
         return [0b0] * -(len(message) // -chunk_size)
     
     def __parse_block_to_char_array(self, block: bytes) -> str:
-        block_bytes = self.__int_to_bytes(block, block.__sizeof__())
+        block_bytes = self.int_to_bytes(block, block.__sizeof__())
         return ''.join([chr(byte) for byte in block_bytes if byte != 0x0])

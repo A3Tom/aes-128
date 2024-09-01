@@ -9,6 +9,7 @@ class AES(EncryptionBase):
         self.__rounds = self.__calculate_encryption_rounds()
 
     def encrypt_message(self, message: str) -> list[bytes]:
+        self.__expanded_key = self.__key_expansion()
         return super().encrypt_message(message, BLOCK_SIZE)
         
     def spout_name(self) -> str:
@@ -19,7 +20,6 @@ class AES(EncryptionBase):
 
     # https://crypto.stackexchange.com/questions/20/what-are-the-practical-differences-between-256-bit-192-bit-and-128-bit-aes-enc/1527#1527
     def _encrypt_block(self, block: bytes) -> bytes:
-        # expanded_key = self.__key_expansion()
         # # block = self.__add_round_key()
 
         # for round in self.__rounds:
@@ -40,9 +40,17 @@ class AES(EncryptionBase):
     def _decrypt_block(self, block: bytes) -> bytes:
         return block ^ self.key
 
+    def _sub_byte(self, byte: int) -> int:
+        return self.sbox_op_helper.rijndael_sbox[byte]
 
-    def __key_expansion(self):
-        pass
+    def _sub_byte_inverse(self, byte: int) -> int:
+        return self.sbox_op_helper.rijndael_sbox_inverse[byte]
+
+    def __key_expansion(self) -> int:
+        key_bytes = self.block_op_helper.int_to_bytes(self.key, self.chunk_size) 
+        print(f"Sboxed Bytes:")
+        [print(f"0x{b:002X} -> 0x{self._sub_byte(b):002X} -> 0x{self._sub_byte_inverse(self._sub_byte(b)):002X}") for b in key_bytes]
+        
 
     def __add_round_key(self, block: bytes, round_key: bytes):
         return block ^ round_key
