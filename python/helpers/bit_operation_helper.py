@@ -23,6 +23,15 @@ class BitOperationHelper():
     # mad props to https://iq.opengenus.org/addition-using-bitwise-operations/ what a belter
     def bitwise_add(self, a: int, b: int) -> int:
         return a if b == 0 else self.bitwise_add(a^b , (a&b) << 1)
+    
+    # Is this a magical method? It is. But I did write it by hand so that's kinda cool
+    def gmul2(self, a: int) -> int:
+        a <<= 1
+        
+        if a > 0xFF: 
+            a ^= 0x11B
+
+        return a
 
     def get_next_base_2(self, var: int) -> int:
         var -= 1
