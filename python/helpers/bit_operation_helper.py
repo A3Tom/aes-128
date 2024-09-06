@@ -28,8 +28,8 @@ class BitOperationHelper():
     def gmul2(self, a: int) -> int:
         a <<= 1
         
-        if a > 0xFF: 
-            a ^= 0x11B
+        if a > 0xFF:        # Note for masel when I next read this;
+            a ^= 0x11B      # Keep hings in polynomials til the end and it'll aw work out
 
         return a
 
