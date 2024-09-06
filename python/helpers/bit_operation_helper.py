@@ -33,6 +33,9 @@ class BitOperationHelper():
 
         return a
 
+    def gmul3(self, a: int) -> int:
+        return self.gmul2(a) ^ a
+
     def get_next_base_2(self, var: int) -> int:
         var -= 1
         for b2i in BASE_2_RANGE:
