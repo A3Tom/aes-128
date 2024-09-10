@@ -27,13 +27,13 @@ class BlockOperationHelper():
             frogs |= int.from_bytes([byte for byte in byte_array_2d[i]])
         return frogs
 
-    def build_2d_byte_array(self, block: bytes) -> list[list[bytes]]:
+    def build_2d_byte_array(self, block: bytes, use_column_major: bool = USE_COLUMN_MAJOR) -> list[list[bytes]]:
         columns = len(bin(block)) // DEFAULT_ROW_BIT_SIZE
         result = [[0]*4 for _ in range(columns)]
         
         self.__build_byte_array_columns(result, block)
 
-        if USE_COLUMN_MAJOR:
+        if use_column_major:
             result = self.transpose_2d_array(result)
 
         return result

@@ -24,17 +24,33 @@ class BitOperationHelper():
     def bitwise_add(self, a: int, b: int) -> int:
         return a if b == 0 else self.bitwise_add(a^b , (a&b) << 1)
     
+    def gmul(self, og_int: int, multiplicator: int) -> int:
+        if multiplicator == 1:
+            return og_int
+        elif multiplicator == 2:
+            return self.gmul2(og_int)
+
+        result = og_int
+        for _ in range(multiplicator // 2):
+            result = self.gmul2(result)
+
+        if(multiplicator % 2 == 1):
+            result ^= og_int
+
+        return result
+
+    
     # Is this a magical method? It is. But I did write it by hand so that's kinda cool
-    def gmul2(self, a: int) -> int:
-        a <<= 1
+    def gmul2(self, og_int: int) -> int:
+        og_int <<= 1
         
-        if a > 0xFF:        # Note for masel when I next read this;
-            a ^= 0x11B      # Keep hings in polynomials til the end and it'll aw work out
+        if og_int > 0xFF:        # Note for masel when I next read this;
+            og_int ^= 0x11B      # Keep hings in polynomials til the end and it'll aw work out
 
-        return a
+        return og_int
 
-    def gmul3(self, a: int) -> int:
-        return self.gmul2(a) ^ a
+    def gmul3(self, og_int: int) -> int:
+        return self.gmul2(og_int) ^ og_int
 
     def get_next_base_2(self, var: int) -> int:
         var -= 1
