@@ -2,11 +2,19 @@ from encryption.encryption_base import EncryptionBase
 
 BLOCK_SIZE = 128
 ENCRYPTION_NAME = "AES"
-ROUND_CONSTANTS = [ 0x01000000, 0x02000000, 
-                    0x04000000, 0x08000000, 
-                    0x10000000, 0x20000000, 
-                    0x40000000, 0x80000000, 
-                    0x1B000000, 0x36000000]
+ROUND_CONSTANTS = [ 
+    0x01000000, 0x02000000, 
+    0x04000000, 0x08000000, 
+    0x10000000, 0x20000000, 
+    0x40000000, 0x80000000, 
+    0x1B000000, 0x36000000
+]
+MIX_COLUMN_MATRIX = [   
+    [2, 3, 1, 1],
+    [1, 2, 3, 1],
+    [1, 1, 2, 3],
+    [3, 1, 1, 2]
+]
 
 class AES(EncryptionBase):
     def __init__(self, key: int, mode_of_operation: str = 'EBC', print_debug: bool = True):
@@ -28,25 +36,29 @@ class AES(EncryptionBase):
     # https://crypto.stackexchange.com/questions/20/what-are-the-practical-differences-between-256-bit-192-bit-and-128-bit-aes-enc/1527#1527
     def _encrypt_block(self, block: bytes) -> bytes:
         prev_block = block
-        # prev_block = 66814286504060421741230023322616923956 # known test value
+        prev_block = 66814286504060421741230023322616923956 # known test value
         prev_block = self.__add_round_key(prev_block, self.key)
-        print(f"{prev_block:032X}")
+        print(f"[r_0-rk] {prev_block:032X}")
 
-        for round in range(1):
+        for round in range(self.__rounds):
+            print()
+            
             prev_block = int.from_bytes(self.__sub_bytes(prev_block))
-            print(f"{prev_block:032X}")
+            print(f"[r_{round + 1}-sb] {prev_block:032X}")
 
             prev_block = self.__shift_rows(prev_block)
-            print(f"{prev_block:032X}")
+            print(f"[r_{round + 1}-sr] {prev_block:032X}")
 
-
-        #     if round != (self.__rounds - 1):
-        #         block = self.__mix_columns()
+            if round != (self.__rounds - 1):
+                prev_block = self.__mix_columns(prev_block)
+                print(f"[r_{round + 1}-mc] {prev_block:032X}")
             
-        #     block = self.__add_round_key(block, round_key)
-        #     pass
+            prev_block = self.__add_round_key(prev_block, self.__round_keys[round])
+            print(f"[r_{round + 1}-rk] {prev_block:032X}")
+            print(f"\nRound {round + 1} complete:")
+            self.block_op_helper.output_2d_array_hex(self.block_op_helper.build_2d_byte_array(prev_block))
         
-        return block ^ self.key
+        return prev_block
 
     def _decrypt_block(self, block: bytes) -> bytes:
         return block ^ self.key
@@ -83,10 +95,10 @@ class AES(EncryptionBase):
             self.__round_keys[round] = round_key
             previous_block = round_key
         
-        print(f"Key: {self.key:032X} produces expanded key schedule:")
+        # print(f"Key: {self.key:032X} produces expanded key schedule:")
 
-        for round in range(self.__rounds):
-            print(f"R{round + 1:02}: {self.__round_keys[round]:032X}")
+        # for round in range(self.__rounds):
+        #     print(f"R{round + 1:02}: {self.__round_keys[round]:032X}")
         
 
     def __add_round_key(self, block: bytes, round_key: bytes):
@@ -107,7 +119,6 @@ class AES(EncryptionBase):
     
     def __shift_rows(self, block: bytes):
         block_array_2d = self.block_op_helper.build_2d_byte_array(block)
-        self.block_op_helper.output_2d_array_hex(block_array_2d)
 
         for col_idx in range(4):
             row = int.from_bytes(block_array_2d[col_idx])
@@ -118,7 +129,37 @@ class AES(EncryptionBase):
         return self.block_op_helper.parse_2d_byte_array_to_int(block_array_2d)
 
     def __mix_columns(self, block: bytes):
-        return block
+        block_array_2d = self.block_op_helper.build_2d_byte_array(block, False)
+        result = block_array_2d
+
+        for column_idx in range(4):
+            byte_1 = self.bit_op_helper.gmul(block_array_2d[column_idx][0], MIX_COLUMN_MATRIX[0][0]) ^ self.bit_op_helper.gmul(block_array_2d[column_idx][1], MIX_COLUMN_MATRIX[0][1]) ^ self.bit_op_helper.gmul(block_array_2d[column_idx][2], MIX_COLUMN_MATRIX[0][2]) ^ self.bit_op_helper.gmul(block_array_2d[column_idx][3], MIX_COLUMN_MATRIX[0][3])
+            byte_2 = self.bit_op_helper.gmul(block_array_2d[column_idx][0], MIX_COLUMN_MATRIX[1][0]) ^ self.bit_op_helper.gmul(block_array_2d[column_idx][1], MIX_COLUMN_MATRIX[1][1]) ^ self.bit_op_helper.gmul(block_array_2d[column_idx][2], MIX_COLUMN_MATRIX[1][2]) ^ self.bit_op_helper.gmul(block_array_2d[column_idx][3], MIX_COLUMN_MATRIX[1][3])
+            byte_3 = self.bit_op_helper.gmul(block_array_2d[column_idx][0], MIX_COLUMN_MATRIX[2][0]) ^ self.bit_op_helper.gmul(block_array_2d[column_idx][1], MIX_COLUMN_MATRIX[2][1]) ^ self.bit_op_helper.gmul(block_array_2d[column_idx][2], MIX_COLUMN_MATRIX[2][2]) ^ self.bit_op_helper.gmul(block_array_2d[column_idx][3], MIX_COLUMN_MATRIX[2][3])
+            byte_4 = self.bit_op_helper.gmul(block_array_2d[column_idx][0], MIX_COLUMN_MATRIX[3][0]) ^ self.bit_op_helper.gmul(block_array_2d[column_idx][1], MIX_COLUMN_MATRIX[3][1]) ^ self.bit_op_helper.gmul(block_array_2d[column_idx][2], MIX_COLUMN_MATRIX[3][2]) ^ self.bit_op_helper.gmul(block_array_2d[column_idx][3], MIX_COLUMN_MATRIX[3][3])
+
+            # for idx, multiplier in enumerate(1, MIX_COLUMN_MATRIX[0]):
+            #     byte_1 ^= self.bit_op_helper.gmul(block_array_2d[idx][column_idx], multiplier)
+
+            output_string = ""
+            output_string += f"{column_idx},{0}: ({MIX_COLUMN_MATRIX[column_idx][0]}){block_array_2d[column_idx][0]:002X} [{byte_1:002X}] | "
+            output_string += f"{column_idx},{1}: ({MIX_COLUMN_MATRIX[column_idx][1]}){block_array_2d[column_idx][1]:002X} [{byte_2:002X}] | "
+            output_string += f"{column_idx},{2}: ({MIX_COLUMN_MATRIX[column_idx][2]}){block_array_2d[column_idx][2]:002X} [{byte_3:002X}] | "
+            output_string += f"{column_idx},{3}: ({MIX_COLUMN_MATRIX[column_idx][3]}){block_array_2d[column_idx][3]:002X} [{byte_4:002X}]"
+            # print(output_string)
+
+            result[column_idx][0] = byte_1
+            result[column_idx][1] = byte_2
+            result[column_idx][2] = byte_3
+            result[column_idx][3] = byte_4
+
+        # result = self.block_op_helper.transpose_2d_array(result)
+        return self.block_op_helper.parse_2d_byte_array_to_int(result)
+
+    def __handle_multiplication_column(byte: bytes, column: list[int]) -> bytes:
+
+
+        pass
 
 
     def __calculate_encryption_rounds(self) -> int:
