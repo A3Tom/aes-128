@@ -17,4 +17,16 @@ I might tackle adding the flexability of Rijndael's variable block size at some 
 | Language | Readme | How fun wis it?
 :-: | :-: | :-- 
 Python | [README](./python/README.md) | :star::star::snake::snake::rocket:
-Node | [README] | Unfinished
+Node | [README](./node/README.md) | N/a
+
+
+## Acknowledgements and Resources
+
+Subject | Author | Title | Type | Link
+:-: | :-- | :-- | :-: | :--
+Bitwise Add | OpenGenus.org | Addition Using Bitwise Operations | :book: | [Cheers mate !](https://iq.opengenus.org/addition-using-bitwise-operations/)
+Block Cipher Modes | Neso Academy | Block Cipher Modes of Operation | :tv: | [Cheers mate !](https://www.youtube.com/watch?v=VmNk-6GTqRE)
+Block Cipher Modes | Computerphile | Modes of Operation | :tv: | [Cheers mate !](https://www.youtube.com/watch?v=Rk0NIQfEXBA)
+Python magic | GeeksForGeeks.org | Matrix transpose without Numpy | :book: | [Cheers mate !](https://www.geeksforgeeks.org/matrix-transpose-without-numpy-in-python/)
+Galois Field Shit (oh my days...) | Samiam.org | Galois | :book: | [Seriously, thank you](https://samiam.org/galois.html)
+Galois Field Shit (oh my days...) | SafeHouse (Medium.com) | How AES Actually Works | :book: | [Seriously, thank you](https://medium.com/codex/aes-how-the-most-advanced-encryption-actually-works-b6341c44edb9)
