@@ -4,9 +4,17 @@
   "description": "An implementation of AES-128 by TS. Full Remo, nothing less.",
   "main": "main.js",
   "scripts": {
-    "build": "node src/main.js"
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "dev": "ts-node src/main.ts"
   },
+  "type": "commonjs",
   "keywords": [],
   "author": "Tom Smith",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.9.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
 }
