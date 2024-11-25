@@ -1,7 +1,5 @@
 import { KEY_SIZE } from "../models/aes-settings";
 
-export const BYTE_SIZE: number = 8;
-export const WORD_SIZE: number = 32;
 export const BLOCK_SIZE: number = 128;
 export const ROUND_CONSTANTS: Set<number> = new Set([
     0x01000000, 0x02000000,

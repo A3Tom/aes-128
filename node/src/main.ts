@@ -1,7 +1,9 @@
 import { calculateEncryptionRounds } from "./lib/aes-utils";
-import { buildBitCapMask, toBinaryString } from "./lib/bit-utils";
-import { EncryptionSetup, formatSetupOutput } from "./lib/spoutin-utils";
+import { buildBitCapMask, circularLeftShift, toBinaryString, getNextBase2, convertIntToBytes, WORD_SIZE, BYTE_SIZE } from "./lib/bit-utils";
+import { subByte } from "./lib/sbox-utils";
+import { formatSetupOutput } from "./lib/spoutin-utils";
 import { KEY_SIZE, MODE_OF_OPERATION } from "./models/aes-settings";
+import { EncryptionSetup } from "./models/setup";
 
 // 0: Setup
 const message: string = "Remo";
@@ -16,28 +18,27 @@ const setup: EncryptionSetup = {
 
 const roundKeys: Record<number, bigint> = {};
 
-formatSetupOutput(setup);
+// formatSetupOutput(setup);
 
 // Calculate encryption rounds
 const encryptionRounds = calculateEncryptionRounds(setup.keySize);
 
 // Expand key schedule
-expandKeySchedule(key, encryptionRounds);
+// expandKeySchedule(key, encryptionRounds);
 
-Object.keys(roundKeys).map(roundKey => {
-    console.log(`[r-${roundKey.toString().padStart(2, '0')}k] ${toBinaryString(roundKeys[+roundKey], 16)}`);
-})
+// formatRoundKeysOutput(roundKeys)
 
 
 function expandKeySchedule(key: bigint, rounds: number): void {
     let previousBlock: bigint = key;
-    let previousColumn: bigint = previousBlock & 0xFFFFFFFFn;
-    let permutationColumn: bigint = previousColumn;
-
-    // permutationColumn = circularLeftShift(permutationColumn, 8);
 
     for (let round = 0; round <= rounds; round++) {
         const roundKey: number = 0x0;
+        let previousColumn: bigint = previousBlock & 0xFFFFFFFFn;
+        let permutationColumn: bigint = previousColumn;
+
+        permutationColumn = circularLeftShift(permutationColumn, WORD_SIZE, BYTE_SIZE);
+
         roundKeys[round] = BigInt(1 << round);
     }
 }
@@ -58,3 +59,4 @@ function expandKeySchedule(key: bigint, rounds: number): void {
 // 5: Mix Columns (fuckin hell... buzzin for this)
 // 6: Add Round Key
 // Repeat steps 3 -> 6, 10 times - omit the last column mixer
+

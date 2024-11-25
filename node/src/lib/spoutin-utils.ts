@@ -1,5 +1,5 @@
-import { KEY_SIZE, MODE_OF_OPERATION } from "../models/aes-settings";
-import { WORD_SIZE } from "./aes-utils";
+import { EncryptionSetup } from "../models/setup";
+import { toBinaryString, WORD_SIZE } from "./bit-utils";
 
 export function formatSetupOutput(setup: EncryptionSetup) {
     console.log("************************");
@@ -15,12 +15,10 @@ export function formatSetupOutput(setup: EncryptionSetup) {
     }
 
     console.log(`  Message: ${setup.message}`);
-
 }
 
-export interface EncryptionSetup {
-    message: string;
-    key: bigint;
-    modeOfOperation: MODE_OF_OPERATION;
-    keySize: KEY_SIZE;
+export function formatRoundKeysOutput(roundKeys: Record<number, bigint>) {
+    Object.keys(roundKeys).map(roundKey => {
+        console.log(`[r-${roundKey.toString().padStart(2, '0')}k] ${toBinaryString(roundKeys[+roundKey], 16)}`);
+    })
 }
