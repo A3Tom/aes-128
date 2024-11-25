@@ -1,20 +1,24 @@
 import { KEY_SIZE } from "../models/aes-settings";
 
-export const WORD_SIZE = 32;
-export const BLOCK_SIZE = 128;
-export const ROUND_CONSTANTS = [
+export const BYTE_SIZE: number = 8;
+export const WORD_SIZE: number = 32;
+export const BLOCK_SIZE: number = 128;
+export const ROUND_CONSTANTS: Set<number> = new Set([
     0x01000000, 0x02000000,
     0x04000000, 0x08000000,
     0x10000000, 0x20000000,
     0x40000000, 0x80000000,
     0x1B000000, 0x36000000
-];
-export const MIX_COLUMN_MATRIX = [
-    [2, 3, 1, 1],
-    [1, 2, 3, 1],
-    [1, 1, 2, 3],
-    [3, 1, 1, 2]
-];
+]);
+
+// I kinda hate this but also kinda don't care cos I managed to give it a type that it didn't shout about.
+// Would prefer UInt8Array[][] though
+export const MIX_COLUMN_MATRIX: Set<Set<number>> = new Set([
+    new Set([2, 3, 1, 1]),
+    new Set([1, 2, 3, 1]),
+    new Set([1, 1, 2, 3]),
+    new Set([3, 1, 1, 2])
+]);
 
 
 export function calculateEncryptionRounds(keySize: KEY_SIZE): number {
