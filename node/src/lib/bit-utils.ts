@@ -21,3 +21,9 @@ export function circularRightShift(value: bigint, blockSize: number, amount: num
 
     return (value >> BigInt(amount)) | circularBits;
 }
+
+// Look, this is inefficient AF I know but it actually worked unlike my port of my python method of the same name
+// TODO: Once I am better with bitwise operations in Node, revisit this nonsense lol...
+export function getNextBase2(value: bigint): number {
+    return 2 ** (value - 1n).toString(2).length;
+}
