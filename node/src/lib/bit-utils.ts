@@ -26,8 +26,18 @@ export function circularRightShift(value: bigint, blockSize: number, amount: num
 
 // Look, this is inefficient AF I know but it actually worked unlike my port of my python method of the same name
 // TODO: Once I am better with bitwise operations in Node, revisit this nonsense lol...
-export function getNextBase2(value: bigint): number {
-    return 2 ** (value - 1n).toString(2).length;
+export function getNextBase2(value: number): number {
+    return 2 ** ((value - 1).toString(2).length);
+}
+
+export function convertByteArrayToInt(byteArray: Uint8Array): bigint {
+    let result: bigint = 0n;
+    for (let i = 0; i < byteArray.length; i++) {
+        result <<= 8n
+        result |= BigInt(byteArray[i])
+    }
+
+    return result;
 }
 
 export function convertByteArrayToHexString(byteArray: Uint8Array): string {
@@ -38,7 +48,7 @@ export function convertByteArrayToHexString(byteArray: Uint8Array): string {
 }
 
 export function convertIntToBytes(value: bigint, valueBitSize?: number): Uint8Array {
-    const bitSize = valueBitSize ?? getNextBase2(value);
+    const bitSize = valueBitSize ?? getNextBase2(getCurrentBase2(value));
     const bitMaskValue: bigint = buildBitCapMask(BYTE_SIZE);
     const byteArray = new Uint8Array(bitSize / BYTE_SIZE);
 
@@ -47,4 +57,13 @@ export function convertIntToBytes(value: bigint, valueBitSize?: number): Uint8Ar
     }
 
     return byteArray;
+}
+
+function getCurrentBase2(value: bigint): number {
+    let bitCount: number = 0;
+    while (value > 0) {
+        value >>= 1n
+        bitCount++;
+    }
+    return bitCount;
 }
