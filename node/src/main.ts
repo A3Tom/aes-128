@@ -1,5 +1,5 @@
-import { calculateEncryptionRounds } from "./lib/aes-utils";
-import { buildBitCapMask, circularLeftShift, toBinaryString, getNextBase2, convertIntToBytes, WORD_SIZE, BYTE_SIZE, convertByteArrayToInt } from "./lib/bit-utils";
+import { calculateEncryptionRounds, ROUND_CONSTANTS } from "./lib/aes-utils";
+import { buildBitCapMask, circularLeftShift, toBinaryString, getNextBase2, convertIntToBytes, WORD_SIZE, BYTE_SIZE, convertByteArrayToInt, bitwiseAdd } from "./lib/bit-utils";
 import { subByte } from "./lib/sbox-utils";
 import { formatSetupOutput } from "./lib/spoutin-utils";
 import { KEY_SIZE, MODE_OF_OPERATION, ROUND_STAGE } from "./models/aes-settings";
@@ -34,25 +34,32 @@ expandKeySchedule(key, encryptionRounds);
 function expandKeySchedule(key: bigint, rounds: number): void {
     let previousBlock: bigint = key;
 
-    for (let round = 0; round < 1; round++) {
-        const roundKey: number = 0x0;
+    for (let roundIdx = 0; roundIdx < 1; roundIdx++) {
         let previousColumn: bigint = previousBlock & 0xFFFFFFFFn;
         let permutationColumn: bigint = previousColumn;
 
-        logVerbose(roundKey, `Beginning: ${toHexString(permutationColumn, BYTE_SIZE)}`);
+        logVerbose(roundIdx, `Beginning: ${toHexString(permutationColumn, BYTE_SIZE)}`);
 
         permutationColumn = circularLeftShift(permutationColumn, WORD_SIZE, BYTE_SIZE);
-        logVerbose(roundKey, `After CLS: ${toHexString(permutationColumn, BYTE_SIZE)}`);
+        logVerbose(roundIdx, `After CLS: ${toHexString(permutationColumn, BYTE_SIZE)}`);
 
-        const subbedBytes = subBytes(permutationColumn);
-        logVerbose(roundKey, `After SubBytes: ${toHexString(subbedBytes, BYTE_SIZE)}`);
+        let subbedBytes = subBytes(permutationColumn);
+        logVerbose(roundIdx, `After SubBytes: ${toHexString(subbedBytes, BYTE_SIZE)}`);
+
+        AddRoundKey(roundIdx, subbedBytes);
+        logVerbose(roundIdx, `After RoundConst: ${toHexString(subbedBytes, BYTE_SIZE)}`);
 
         // roundKeys[round] = BigInt(1 << round);
     }
 
-    function logVerbose(roundKey: number, message: string) {
-        outputVerbose(ROUND_STAGE.KeyExpansion, roundKey, message);
+    function logVerbose(roundIdx: number, message: string) {
+        outputVerbose(ROUND_STAGE.KeyExpansion, roundIdx, message);
     }
+}
+
+function AddRoundKey(round: number, permutationColumn: Uint8Array): Uint8Array {
+    permutationColumn[0] = bitwiseAdd(permutationColumn[0], ROUND_CONSTANTS[round]) & Number(buildBitCapMask(8));
+    return permutationColumn;
 }
 
 function subBytes(value: number | bigint): Uint8Array {
@@ -72,9 +79,9 @@ function toHexString(value: number | bigint | Uint8Array, keySize: number) {
     return integerValue.toString(16).toUpperCase().padStart(keySize, '0');
 }
 
-function outputVerbose(stage: ROUND_STAGE, roundKey: number, message: string) {
+function outputVerbose(stage: ROUND_STAGE, roundIdx: number, message: string) {
     if (logVerbosity === LOG_VERBOSITY.YAPPIN)
-        console.log(`${stage} ${formatRoundKey(roundKey)} ${message}`);
+        console.log(`${stage} ${formatRoundKey(roundIdx)} ${message}`);
 }
 
 function formatRoundKey(roundKey: number) {
