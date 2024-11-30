@@ -29,7 +29,7 @@ export function formatRoundKey(roundKey: number) {
     return `[r-${(roundKey + 1).toString().padStart(2, '0')}]`
 }
 
-export function toHexSplit(value: number | bigint | Uint8Array, keySize: number, denoteIdx: number = WORD_SIZE, joinStr: string = ' |') {
+export function toHexSplit(value: number | bigint | Uint8Array, keySize: number, denoteIdx: number = WORD_SIZE, joinStr: string = ' |', splitValues: boolean = true) {
     return ensureBigIntegerValue(value)
         .toString(16)
         .padStart(keySize, '0')
@@ -37,7 +37,7 @@ export function toHexSplit(value: number | bigint | Uint8Array, keySize: number,
         .split('')
         .reduce((output, char, idx) => {
             output += `${idx && !(idx % denoteIdx) ? joinStr : ''}`;
-            output += `${idx && !(idx % 2) ? ' ' : ''}${char}`
+            output += `${splitValues && idx && !(idx % 2) ? ' ' : ''}${char}`
             return output;
         }, "");
 }
