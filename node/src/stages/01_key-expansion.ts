@@ -1,7 +1,7 @@
 import { ROUND_CONSTANTS } from "../lib/aes-utils";
 import { bitwiseAdd, buildBitCapMask, BYTE_SIZE, circularLeftShift, convertIntToBytes, WORD_SIZE } from "../lib/bit-utils";
 import { subByte } from "../lib/sbox-utils";
-import { outputVerbose, toHexString } from "../lib/spoutin-utils";
+import { outputVerbose, toHexSplit, toHexString } from "../lib/spoutin-utils";
 import { ROUND_STAGE } from "../models/aes-settings";
 
 export function expandKeySchedule(key: bigint, rounds: number): void {
@@ -11,16 +11,16 @@ export function expandKeySchedule(key: bigint, rounds: number): void {
         let previousColumn: bigint = previousBlock & 0xFFFFFFFFn;
         let permutationColumn: bigint = previousColumn;
 
-        logVerbose(roundIdx, `Beginning: ${toHexString(permutationColumn, BYTE_SIZE)}`);
+        logVerbose(roundIdx, `Perm Col:   \t${toHexSplit(permutationColumn, BYTE_SIZE)}`);
 
         permutationColumn = circularLeftShift(permutationColumn, WORD_SIZE, BYTE_SIZE);
-        logVerbose(roundIdx, `After CLS: ${toHexString(permutationColumn, BYTE_SIZE)}`);
+        logVerbose(roundIdx, `Circ LShift:\t${toHexSplit(permutationColumn, BYTE_SIZE)}`);
 
         let subbedBytes = subBytes(permutationColumn);
-        logVerbose(roundIdx, `After SubBytes: ${toHexString(subbedBytes, BYTE_SIZE)}`);
+        logVerbose(roundIdx, `SubBytes:   \t${toHexSplit(subbedBytes, BYTE_SIZE)}`);
 
         AddRoundKey(roundIdx, subbedBytes);
-        logVerbose(roundIdx, `After RoundConst: ${toHexString(subbedBytes, BYTE_SIZE)}`);
+        logVerbose(roundIdx, `Round Const:\t${toHexSplit(subbedBytes, BYTE_SIZE)}`);
 
         // roundKeys[round] = BigInt(1 << round);
     }
