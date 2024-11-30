@@ -1,7 +1,7 @@
 import { ROUND_STAGE } from "../models/aes-settings";
 import { EncryptionSetup } from "../models/setup";
 import { LOG_VERBOSITY } from "../models/system-settings";
-import { BYTE_SIZE, convertByteArrayToInt, WORD_SIZE } from "./bit-utils";
+import { BYTE_SIZE, convertByteArrayToInt, ensureBigIntegerValue, WORD_SIZE } from "./bit-utils";
 
 const logVerbosity: LOG_VERBOSITY = LOG_VERBOSITY.YAPPIN;
 
@@ -41,10 +41,4 @@ export function toHexSplit(value: number | bigint | Uint8Array, keySize: number,
             output += `${idx && !(idx % 2) ? ' ' : ''}${char}`
             return output;
         }, "");
-}
-
-export function ensureBigIntegerValue(value: number | bigint | Uint8Array): BigInt {
-    return (value instanceof Uint8Array)
-        ? convertByteArrayToInt(value as Uint8Array)
-        : BigInt(value);
 }

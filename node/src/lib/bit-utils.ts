@@ -1,5 +1,7 @@
 export const BYTE_SIZE: number = 8;
+export const BYTE_SIZE_MASK: bigint = buildBitCapMask(BYTE_SIZE);
 export const WORD_SIZE: number = 32;
+export const WORD_SIZE_MASK: bigint = buildBitCapMask(WORD_SIZE);
 export const BASE_2_RANGE: Set<number> = new Set([1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048]);
 
 export function toBinaryString(int: number | bigint, blockSize: number = 32): string {
@@ -62,6 +64,12 @@ export function convertIntToBytes(value: bigint, valueBitSize?: number): Uint8Ar
     }
 
     return byteArray;
+}
+
+export function ensureBigIntegerValue(value: number | bigint | Uint8Array): bigint {
+    return (value instanceof Uint8Array)
+        ? convertByteArrayToInt(value as Uint8Array)
+        : BigInt(value);
 }
 
 function getCurrentBase2(value: bigint): number {
