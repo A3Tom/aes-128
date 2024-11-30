@@ -1,13 +1,13 @@
 import { KEY_SIZE } from "../models/aes-settings";
 
 export const BLOCK_SIZE: number = 128;
-export const ROUND_CONSTANTS: Set<number> = new Set([
-    0x01000000, 0x02000000,
-    0x04000000, 0x08000000,
-    0x10000000, 0x20000000,
-    0x40000000, 0x80000000,
-    0x1B000000, 0x36000000
-]);
+export const ROUND_CONSTANTS: number[] = [
+    0x01, 0x02,
+    0x04, 0x08,
+    0x10, 0x20,
+    0x40, 0x80,
+    0x1B, 0x36
+];
 
 // I kinda hate this but also kinda don't care cos I managed to give it a type that it didn't shout about.
 // Would prefer UInt8Array[][] though
