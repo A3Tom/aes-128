@@ -1,7 +1,8 @@
 export const enum MODE_OF_OPERATION {
-    ECB = "ecb",
-    CTR = "ctr",
-    GCM = "gcm"
+    ECB = "ECB",
+    CBC = "CBC",
+    CTR = "CTR",
+    GCM = "GCM"
 }
 
 export const enum KEY_SIZE {
@@ -16,4 +17,12 @@ export const enum ROUND_STAGE {
     ShiftRows = 'Shift Rows',
     MixColumns = 'Mix Columns',
     AddRoundKey = 'Add Round Key'
+}
+
+export interface AESConfig {
+    message: string;
+    key: bigint;
+    modeOfOperation: MODE_OF_OPERATION;
+    keySize: KEY_SIZE;
+    encryptionRounds: number;
 }
