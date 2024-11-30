@@ -5,4 +5,5 @@ export interface EncryptionSetup {
     key: bigint;
     modeOfOperation: MODE_OF_OPERATION;
     keySize: KEY_SIZE;
+    encryptionRounds: number;
 }
