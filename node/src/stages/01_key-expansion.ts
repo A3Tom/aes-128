@@ -1,18 +1,20 @@
 import { ROUND_CONSTANTS } from "../lib/aes-utils";
-import { bitwiseAdd, buildBitCapMask, BYTE_SIZE, circularLeftShift, convertIntToBytes, ensureBigIntegerValue, WORD_SIZE, WORD_SIZE_MASK } from "../lib/bit-utils";
+import { BYTE_SIZE, WORD_SIZE, WORD_SIZE_MASK, circularLeftShift, convertIntToBytes, ensureBigIntegerValue } from "../lib/bit-utils";
 import { subByte } from "../lib/sbox-utils";
-import { outputVerbose, toHexSplit, toHexString } from "../lib/spoutin-utils";
-import { ROUND_STAGE } from "../models/aes-settings";
+import { outputVerbose, toHexSplit } from "../lib/spoutin-utils";
+import { AESConfig, ROUND_STAGE } from "../models/aes-settings";
+import { LOG_VERBOSITY } from "../models/system-settings";
 
-export function expandKeySchedule(key: bigint, keySize: number, rounds: number): void {
+export function expandKeySchedule(config: AESConfig): bigint[] {
+    const loggingVerbosity = config.stageLoggingVerbosity[ROUND_STAGE.KeyExpansion];
+
     const roundKeys: bigint[] = []
-    let previousBlock: bigint = key;
+    let previousBlock: bigint = config.key;
 
-    for (let roundIdx = 0; roundIdx < rounds; roundIdx++) {
+    for (let roundIdx = 0; roundIdx < config.encryptionRounds; roundIdx++) {
         let roundKey: bigint = BigInt(0x0);
         let previousColumn: bigint = previousBlock & WORD_SIZE_MASK;
         let permutationColumn: bigint = previousBlock & WORD_SIZE_MASK;
-
 
         logVerbose(roundIdx, `Perm Col:   \t${toHexSplit(permutationColumn, BYTE_SIZE)}`);
 
@@ -25,7 +27,7 @@ export function expandKeySchedule(key: bigint, keySize: number, rounds: number):
         permutationColumn = addRoundConstant(roundIdx, permutationColumn);
         logVerbose(roundIdx, `Round Const:\t${toHexSplit(permutationColumn, BYTE_SIZE)}`);
 
-        const wordCount = keySize / WORD_SIZE;
+        const wordCount = +config.keySize / WORD_SIZE;
         for (let wordIdx = 0; wordIdx < wordCount; wordIdx++) {
             previousColumn = (previousBlock >> BigInt(((wordCount - 1) - wordIdx) * WORD_SIZE) & WORD_SIZE_MASK)
             roundKey = (roundKey << BigInt(WORD_SIZE)) | (previousColumn ^ permutationColumn);
@@ -39,8 +41,13 @@ export function expandKeySchedule(key: bigint, keySize: number, rounds: number):
         roundKeys.push(previousBlock);
     }
 
+    return roundKeys;
+
+
+
     function logVerbose(roundIdx: number, message: string) {
-        outputVerbose(ROUND_STAGE.KeyExpansion, roundIdx, message);
+        if (loggingVerbosity === LOG_VERBOSITY.YAPPIN)
+            outputVerbose(ROUND_STAGE.KeyExpansion, roundIdx, message);
     }
 }
 

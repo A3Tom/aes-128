@@ -1,3 +1,5 @@
+import { LOG_VERBOSITY } from "./system-settings";
+
 export const enum MODE_OF_OPERATION {
     ECB = "ECB",
     CBC = "CBC",
@@ -25,4 +27,5 @@ export interface AESConfig {
     modeOfOperation: MODE_OF_OPERATION;
     keySize: KEY_SIZE;
     encryptionRounds: number;
+    stageLoggingVerbosity: Record<ROUND_STAGE, LOG_VERBOSITY>;
 }

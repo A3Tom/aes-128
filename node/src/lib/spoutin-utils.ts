@@ -41,3 +41,13 @@ export function toHexSplit(value: number | bigint | Uint8Array, keySize: number,
             return output;
         }, "");
 }
+
+export function configureLoggingVerbosityByStage(): Record<ROUND_STAGE, LOG_VERBOSITY> {
+    return {
+        [ROUND_STAGE.AddRoundKey]: LOG_VERBOSITY.STFU,
+        [ROUND_STAGE.KeyExpansion]: LOG_VERBOSITY.STFU,
+        [ROUND_STAGE.MixColumns]: LOG_VERBOSITY.STFU,
+        [ROUND_STAGE.ShiftRows]: LOG_VERBOSITY.STFU,
+        [ROUND_STAGE.SubBytes]: LOG_VERBOSITY.STFU,
+    };
+}
