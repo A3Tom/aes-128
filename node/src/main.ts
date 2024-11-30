@@ -1,13 +1,12 @@
 import { calculateEncryptionRounds, ROUND_CONSTANTS } from "./lib/aes-utils";
 import { buildBitCapMask, circularLeftShift, toBinaryString, getNextBase2, convertIntToBytes, WORD_SIZE, BYTE_SIZE, convertByteArrayToInt, bitwiseAdd } from "./lib/bit-utils";
 import { subByte } from "./lib/sbox-utils";
-import { formatSetupOutput } from "./lib/spoutin-utils";
+import { formatSetupOutput, outputVerbose, toHexString } from "./lib/spoutin-utils";
 import { KEY_SIZE, MODE_OF_OPERATION, ROUND_STAGE } from "./models/aes-settings";
 import { EncryptionSetup } from "./models/setup";
 import { LOG_VERBOSITY } from "./models/system-settings";
 
 // 0: Setup
-const logVerbosity: LOG_VERBOSITY = LOG_VERBOSITY.YAPPIN;
 const message: string = "Remo";
 const key: bigint = 57811460909138771071931939740208549692n;
 
@@ -20,7 +19,7 @@ const setup: EncryptionSetup = {
 
 const roundKeys: Record<number, bigint> = {};
 
-// formatSetupOutput(setup);
+formatSetupOutput(setup);
 
 // Calculate encryption rounds
 const encryptionRounds = calculateEncryptionRounds(setup.keySize);
@@ -69,23 +68,6 @@ function subBytes(value: number | bigint): Uint8Array {
         result[idx] = subByte(byte);
         return result;
     }, new Uint8Array(byteArray.length));
-}
-
-function toHexString(value: number | bigint | Uint8Array, keySize: number) {
-    const integerValue = (value instanceof Uint8Array)
-        ? convertByteArrayToInt(value as Uint8Array)
-        : value;
-
-    return integerValue.toString(16).toUpperCase().padStart(keySize, '0');
-}
-
-function outputVerbose(stage: ROUND_STAGE, roundIdx: number, message: string) {
-    if (logVerbosity === LOG_VERBOSITY.YAPPIN)
-        console.log(`${stage} ${formatRoundKey(roundIdx)} ${message}`);
-}
-
-function formatRoundKey(roundKey: number) {
-    return `[r-${(roundKey + 1).toString().padStart(2, '0')}]`
 }
 
 
