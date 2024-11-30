@@ -1,27 +1,29 @@
 import { calculateEncryptionRounds } from "./lib/aes-utils";
 import { formatSetupOutput } from "./lib/spoutin-utils";
-import { KEY_SIZE, MODE_OF_OPERATION } from "./models/aes-settings";
-import { EncryptionSetup } from "./models/setup";
+import { AESConfig, KEY_SIZE, MODE_OF_OPERATION } from "./models/aes-settings";
 import { expandKeySchedule } from "./stages/01_key-expansion";
 
 // 0: Setup
 const message: string = "Remo";
 const key: bigint = 57811460909138771071931939740208549692n;
+const keySize: KEY_SIZE = KEY_SIZE._128;
+const modeOfOperation: MODE_OF_OPERATION = MODE_OF_OPERATION.ECB;
+const encryptionRounds: number = calculateEncryptionRounds(keySize);
 
-const setup: EncryptionSetup = {
+const config: AESConfig = {
     message,
     key,
-    modeOfOperation: MODE_OF_OPERATION.ECB,
-    keySize: KEY_SIZE._128
+    modeOfOperation,
+    keySize,
+    encryptionRounds
 };
 
-formatSetupOutput(setup);
+formatSetupOutput(config);
 
 // Calculate encryption rounds
-const encryptionRounds = calculateEncryptionRounds(setup.keySize);
 
 // Expand key schedule
-const keySchedule = expandKeySchedule(key, encryptionRounds);
+const keySchedule = expandKeySchedule(key, +config.keySize, encryptionRounds);
 
 // formatRoundKeysOutput(roundKeys)
 

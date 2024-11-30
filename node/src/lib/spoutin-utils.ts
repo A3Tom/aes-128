@@ -1,17 +1,16 @@
-import { ROUND_STAGE } from "../models/aes-settings";
-import { EncryptionSetup } from "../models/setup";
+import { AESConfig, ROUND_STAGE } from "../models/aes-settings";
 import { LOG_VERBOSITY } from "../models/system-settings";
 import { BYTE_SIZE, convertByteArrayToInt, ensureBigIntegerValue, WORD_SIZE } from "./bit-utils";
 
-const logVerbosity: LOG_VERBOSITY = LOG_VERBOSITY.YAPPIN;
+const logVerbosity: LOG_VERBOSITY = LOG_VERBOSITY.STFU;
 
-export function formatSetupOutput(setup: EncryptionSetup) {
-    console.log("************************");
-    console.log(`  AES-${setup.keySize} (${setup.modeOfOperation})`);
+export function formatSetupOutput(setup: AESConfig) {
+    console.log("**************************************************************");
+    console.log(`  Alg: ${setup.modeOfOperation} AES-${setup.keySize} (${setup.encryptionRounds} rounds)`);
     console.log(`  Key: ${setup.key}`);
     console.log(`  Hex: ${toHexSplit(setup.key, WORD_SIZE, BYTE_SIZE)}`);
     console.log(`  Msg: ${setup.message}`);
-    console.log("************************\n");
+    console.log("**************************************************************\n");
 }
 
 export function toHexString(value: number | bigint | Uint8Array, wordSize: number) {
