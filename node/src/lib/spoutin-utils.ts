@@ -1,6 +1,6 @@
 import { AESConfig, ROUND_STAGE } from "../models/aes-settings";
 import { LOG_VERBOSITY } from "../models/system-settings";
-import { BYTE_SIZE, convertByteArrayToInt, ensureBigIntegerValue, WORD_SIZE } from "./bit-utils";
+import { BYTE_SIZE, ensureBigIntegerValue, WORD_SIZE } from "./bit-utils";
 
 const logVerbosity: LOG_VERBOSITY = LOG_VERBOSITY.STFU;
 
@@ -42,12 +42,18 @@ export function toHexSplit(value: number | bigint | Uint8Array, keySize: number,
         }, "");
 }
 
+export function outputKeySchedule(keySchedule: bigint[]) {
+    console.log("  Key Schedule:");
+    keySchedule.map((key, idx) => console.log(`  ${formatRoundKey(idx)} ${key.toString(16).toUpperCase().padStart(WORD_SIZE, '0')}`))
+    console.log("\n**************************************************************\n");
+}
+
 export function configureLoggingVerbosityByStage(): Record<ROUND_STAGE, LOG_VERBOSITY> {
     return {
-        [ROUND_STAGE.AddRoundKey]: LOG_VERBOSITY.STFU,
         [ROUND_STAGE.KeyExpansion]: LOG_VERBOSITY.STFU,
         [ROUND_STAGE.MixColumns]: LOG_VERBOSITY.STFU,
         [ROUND_STAGE.ShiftRows]: LOG_VERBOSITY.STFU,
         [ROUND_STAGE.SubBytes]: LOG_VERBOSITY.STFU,
+        [ROUND_STAGE.AddRoundKey]: LOG_VERBOSITY.STFU,
     };
 }

@@ -1,14 +1,14 @@
 import { ROUND_CONSTANTS } from "../lib/aes-utils";
 import { BYTE_SIZE, WORD_SIZE, WORD_SIZE_MASK, circularLeftShift, convertIntToBytes, ensureBigIntegerValue } from "../lib/bit-utils";
 import { subByte } from "../lib/sbox-utils";
-import { outputVerbose, toHexSplit } from "../lib/spoutin-utils";
+import { outputKeySchedule, outputVerbose, toHexSplit } from "../lib/spoutin-utils";
 import { AESConfig, ROUND_STAGE } from "../models/aes-settings";
 import { LOG_VERBOSITY } from "../models/system-settings";
 
 export function expandKeySchedule(config: AESConfig): bigint[] {
     const loggingVerbosity = config.stageLoggingVerbosity[ROUND_STAGE.KeyExpansion];
 
-    const roundKeys: bigint[] = []
+    const keySchedule: bigint[] = []
     let previousBlock: bigint = config.key;
 
     for (let roundIdx = 0; roundIdx < config.encryptionRounds; roundIdx++) {
@@ -38,12 +38,13 @@ export function expandKeySchedule(config: AESConfig): bigint[] {
         logVerbose(roundIdx, `Round Key:  \t${toHexSplit(roundKey, WORD_SIZE, 8)}`);
 
         previousBlock = roundKey;
-        roundKeys.push(previousBlock);
+        keySchedule.push(previousBlock);
     }
 
-    return roundKeys;
+    if (loggingVerbosity === LOG_VERBOSITY.BARE_MIN)
+        outputKeySchedule(keySchedule);
 
-
+    return keySchedule;
 
     function logVerbose(roundIdx: number, message: string) {
         if (loggingVerbosity === LOG_VERBOSITY.YAPPIN)

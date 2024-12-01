@@ -28,9 +28,6 @@ formatSetupOutput(config);
 // Expand key schedule
 const keySchedule = expandKeySchedule(config);
 
-// formatRoundKeysOutput(roundKeys)
-
-
 
 // Encrypting the Message
 
