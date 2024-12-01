@@ -72,6 +72,11 @@ export function ensureBigIntegerValue(value: number | bigint | Uint8Array): bigi
         : BigInt(value);
 }
 
+// Fuckin huge bigup to Fawad Ghafoor, what a legend https://stackoverflow.com/a/17428705
+export function transposeArray(array: number[][]): number[][] {
+    return array[0].map((_, colIndex) => array.map(row => row[colIndex]));
+}
+
 function getCurrentBase2(value: bigint): number {
     let bitCount: number = 0;
     while (value > 0) {

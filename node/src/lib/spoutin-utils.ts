@@ -48,6 +48,10 @@ export function outputKeySchedule(keySchedule: bigint[]) {
     console.log("\n**************************************************************\n");
 }
 
+export function outputMultiDimentionalArray(array: number[][]) {
+    array.map(col => console.log(`[${col.join(',')}]`))
+}
+
 export function configureLoggingVerbosityByStage(): Record<ROUND_STAGE, LOG_VERBOSITY> {
     return {
         [ROUND_STAGE.KeyExpansion]: LOG_VERBOSITY.STFU,
