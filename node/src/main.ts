@@ -1,6 +1,7 @@
-import { calculateEncryptionRounds } from "./lib/aes-utils";
-import { BYTE_SIZE, transposeArray, WORD_SIZE } from "./lib/bit-utils";
-import { configureLoggingVerbosityByStage, convertStringToBigInt, convertStringToHex, formatSetupOutput, parseHexToBigInt, toHexSplit, toHexString } from "./lib/spoutin-utils";
+import { calculateEncryptionRounds, subBytes } from "./lib/aes-utils";
+import { BYTE_SIZE, BYTE_SIZE_BI, BYTE_SIZE_MASK, circularLeftShift, convertBigIntegerToWordArray, convertIntToBytes, transposeArray, WORD_SIZE } from "./lib/bit-utils";
+import { subByte } from "./lib/sbox-utils";
+import { configureLoggingVerbosityByStage, convertStringToBigInt, convertStringToHex, formatSetupOutput, outputMultiDimentionalArray, parseHexToBigInt, toHexSplit, toHexString } from "./lib/spoutin-utils";
 import { AESConfig, KEY_SIZE, MODE_OF_OPERATION, ROUND_STAGE } from "./models/aes-settings";
 import { LOG_VERBOSITY } from "./models/system-settings";
 import { expandKeySchedule } from "./stages/01_key-expansion";
@@ -43,10 +44,27 @@ const addRKResult = msgBlocksInt ^ key
 console.log(toHexSplit(msgBlocksInt, WORD_SIZE, BYTE_SIZE));
 console.log(toHexSplit(addRKResult, WORD_SIZE, BYTE_SIZE));
 
+
 // For Each Round
+
+// 3: Sub Bytes
+let subbedBytes = subBytes(addRKResult);
+console.log(toHexSplit(subbedBytes, WORD_SIZE, BYTE_SIZE));
+
+// 4: Shift Rows
+const wordArray = convertBigIntegerToWordArray(subbedBytes);
+
+wordArray.map((x, idx) => console.log(`WordArray: [${idx}] ${toHexSplit(x, 8)}`))
+
+wordArray.map((x, idx) => {
+    const shiftAmount = idx * BYTE_SIZE;
+    const shiftedVal = circularLeftShift(x, WORD_SIZE, shiftAmount);
+    console.log(`Shift Row: [${idx}] ${toHexSplit(shiftedVal, 8)}`)
+})
+
+
 for (let roundIdx = 0; roundIdx < keySchedule.length; roundIdx++) {
     // 3: Sub Bytes
-    // 4: Shift Rows
     // 5: Mix Columns (fuckin hell... buzzin for this)
     // 6: Add Round Key
 }
