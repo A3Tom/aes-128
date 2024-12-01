@@ -1,6 +1,8 @@
 export const BYTE_SIZE: number = 8;
+export const BYTE_SIZE_BI: bigint = BigInt(BYTE_SIZE);
 export const BYTE_SIZE_MASK: bigint = buildBitCapMask(BYTE_SIZE);
 export const WORD_SIZE: number = 32;
+export const WORD_SIZE_BI: bigint = BigInt(WORD_SIZE);
 export const WORD_SIZE_MASK: bigint = buildBitCapMask(WORD_SIZE);
 export const BASE_2_RANGE: Set<number> = new Set([1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048]);
 
@@ -75,6 +77,17 @@ export function ensureBigIntegerValue(value: number | bigint | Uint8Array): bigi
 // Fuckin huge bigup to Fawad Ghafoor, what a legend https://stackoverflow.com/a/17428705
 export function transposeArray(array: number[][]): number[][] {
     return array[0].map((_, colIndex) => array.map(row => row[colIndex]));
+}
+
+export function convertBigIntegerToWordArray(value: bigint): bigint[] {
+    const result: bigint[] = [];
+
+    while (value) {
+        result.push(BigInt(value & WORD_SIZE_MASK))
+        value >>= WORD_SIZE_BI
+    }
+
+    return result.reverse(); // Cheeky, ano...
 }
 
 function getCurrentBase2(value: bigint): number {

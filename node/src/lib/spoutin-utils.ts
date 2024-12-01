@@ -55,7 +55,7 @@ export function outputKeySchedule(keySchedule: bigint[]) {
     console.log("\n**************************************************************\n");
 }
 
-export function outputMultiDimentionalArray(array: number[][]) {
+export function outputMultiDimentionalArray(array: number[][] | bigint[][]) {
     array.map(col => console.log(`[${col.join(',')}]`))
 }
 
