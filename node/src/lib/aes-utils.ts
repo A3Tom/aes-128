@@ -1,4 +1,6 @@
 import { KEY_SIZE } from "../models/aes-settings";
+import { convertIntToBytes, ensureBigIntegerValue } from "./bit-utils";
+import { subByte } from "./sbox-utils";
 
 export const BLOCK_SIZE: number = 128;
 export const ROUND_CONSTANTS: bigint[] = [
@@ -30,4 +32,15 @@ export function calculateEncryptionRounds(keySize: KEY_SIZE): number {
         default:
             throw `Key Size: ${keySize} isny valid ya fanny`;
     }
+}
+
+export function subBytes(value: number | bigint): bigint {
+    const byteArray = convertIntToBytes(BigInt(value));
+
+    return ensureBigIntegerValue(
+        byteArray.reduce<Uint8Array>((result, byte, idx) => {
+            result[idx] = subByte(byte);
+            return result;
+        }, new Uint8Array(byteArray.length))
+    );
 }

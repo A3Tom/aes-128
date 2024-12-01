@@ -66,6 +66,16 @@ export function convertStringToHex(message: string): string {
         .join('');
 }
 
+export function convertStringToBigInt(message: string): bigint {
+    return message
+        .split('')
+        .reduce((result, x) => {
+            result <<= 8n
+            result += BigInt(x.charCodeAt(0));
+            return result;
+        }, 0n);
+}
+
 // Yo massive shout out to Daniel Earwicker (amazing name btw) https://stackoverflow.com/a/60435654
 export function convertHexToString(hexMessage: string): string {
     return hexMessage
@@ -73,4 +83,15 @@ export function convertHexToString(hexMessage: string): string {
         .filter(x => !!x)
         .map(x => String.fromCharCode(parseInt(x, 16)))
         .join('');
+}
+
+export function parseHexToBigInt(hexMessage: string) {
+    return hexMessage
+        .split(/(\w{8})/g)
+        .filter(x => !!x)
+        .reduce((result, char) => {
+            result <<= 32n
+            result |= BigInt(parseInt(char, 16))
+            return result;
+        }, 0n)
 }

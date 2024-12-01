@@ -1,6 +1,5 @@
-import { ROUND_CONSTANTS } from "../lib/aes-utils";
+import { ROUND_CONSTANTS, subBytes } from "../lib/aes-utils";
 import { BYTE_SIZE, WORD_SIZE, WORD_SIZE_MASK, circularLeftShift, convertIntToBytes, ensureBigIntegerValue } from "../lib/bit-utils";
-import { subByte } from "../lib/sbox-utils";
 import { outputKeySchedule, outputVerbose, toHexSplit } from "../lib/spoutin-utils";
 import { AESConfig, ROUND_STAGE } from "../models/aes-settings";
 import { LOG_VERBOSITY } from "../models/system-settings";
@@ -32,10 +31,9 @@ export function expandKeySchedule(config: AESConfig): bigint[] {
             previousColumn = (previousBlock >> BigInt(((wordCount - 1) - wordIdx) * WORD_SIZE) & WORD_SIZE_MASK)
             roundKey = (roundKey << BigInt(WORD_SIZE)) | (previousColumn ^ permutationColumn);
             permutationColumn = roundKey & WORD_SIZE_MASK;
-
         }
 
-        logVerbose(roundIdx, `Round Key:  \t${toHexSplit(roundKey, WORD_SIZE, 8)}`);
+        logVerbose(roundIdx, `Round Key:  \t${toHexSplit(roundKey, WORD_SIZE, BYTE_SIZE)}`);
 
         previousBlock = roundKey;
         keySchedule.push(previousBlock);
@@ -55,15 +53,4 @@ export function expandKeySchedule(config: AESConfig): bigint[] {
 export function addRoundConstant(round: number, permutationColumn: bigint): bigint {
     permutationColumn ^= ROUND_CONSTANTS[round];
     return permutationColumn & WORD_SIZE_MASK;
-}
-
-export function subBytes(value: number | bigint): bigint {
-    const byteArray = convertIntToBytes(BigInt(value));
-
-    return ensureBigIntegerValue(
-        byteArray.reduce<Uint8Array>((result, byte, idx) => {
-            result[idx] = subByte(byte);
-            return result;
-        }, new Uint8Array(byteArray.length))
-    );
 }
