@@ -1,5 +1,5 @@
 import { ROUND_CONSTANTS, subBytes } from "../lib/aes-utils";
-import { BYTE_SIZE, WORD_SIZE, WORD_SIZE_MASK, circularLeftShift, convertIntToBytes, ensureBigIntegerValue } from "../lib/bit-utils";
+import { BYTE_SIZE, WORD_SIZE, WORD_SIZE_BI, WORD_SIZE_MASK, circularLeftShift, convertIntToBytes, ensureBigIntegerValue } from "../lib/bit-utils";
 import { outputKeySchedule, outputVerbose, toHexSplit } from "../lib/spoutin-utils";
 import { AESConfig, ROUND_STAGE } from "../models/aes-settings";
 import { LOG_VERBOSITY } from "../models/system-settings";
@@ -29,7 +29,7 @@ export function expandKeySchedule(config: AESConfig): bigint[] {
         const wordCount = +config.keySize / WORD_SIZE;
         for (let wordIdx = 0; wordIdx < wordCount; wordIdx++) {
             previousColumn = (previousBlock >> BigInt(((wordCount - 1) - wordIdx) * WORD_SIZE) & WORD_SIZE_MASK)
-            roundKey = (roundKey << BigInt(WORD_SIZE)) | (previousColumn ^ permutationColumn);
+            roundKey = (roundKey << WORD_SIZE_BI) | (previousColumn ^ permutationColumn);
             permutationColumn = roundKey & WORD_SIZE_MASK;
         }
 
