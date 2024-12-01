@@ -2,7 +2,15 @@ import { AESConfig, ROUND_STAGE } from "../models/aes-settings";
 import { LOG_VERBOSITY } from "../models/system-settings";
 import { BYTE_SIZE, ensureBigIntegerValue, WORD_SIZE } from "./bit-utils";
 
-const logVerbosity: LOG_VERBOSITY = LOG_VERBOSITY.STFU;
+export function configureLoggingVerbosityByStage(): Record<ROUND_STAGE, LOG_VERBOSITY> {
+    return {
+        [ROUND_STAGE.KeyExpansion]: LOG_VERBOSITY.STFU,
+        [ROUND_STAGE.MixColumns]: LOG_VERBOSITY.STFU,
+        [ROUND_STAGE.ShiftRows]: LOG_VERBOSITY.STFU,
+        [ROUND_STAGE.SubBytes]: LOG_VERBOSITY.STFU,
+        [ROUND_STAGE.AddRoundKey]: LOG_VERBOSITY.STFU,
+    };
+}
 
 export function formatSetupOutput(setup: AESConfig) {
     console.log("**************************************************************");
@@ -21,8 +29,7 @@ export function toHexString(value: number | bigint | Uint8Array, wordSize: numbe
 }
 
 export function outputVerbose(stage: ROUND_STAGE, roundIdx: number, message: string) {
-    if (logVerbosity === LOG_VERBOSITY.YAPPIN)
-        console.log(`${stage} ${formatRoundKey(roundIdx)} ${message}`);
+    console.log(`${stage} ${formatRoundKey(roundIdx)} ${message}`);
 }
 
 export function formatRoundKey(roundKey: number) {
@@ -52,12 +59,18 @@ export function outputMultiDimentionalArray(array: number[][]) {
     array.map(col => console.log(`[${col.join(',')}]`))
 }
 
-export function configureLoggingVerbosityByStage(): Record<ROUND_STAGE, LOG_VERBOSITY> {
-    return {
-        [ROUND_STAGE.KeyExpansion]: LOG_VERBOSITY.STFU,
-        [ROUND_STAGE.MixColumns]: LOG_VERBOSITY.STFU,
-        [ROUND_STAGE.ShiftRows]: LOG_VERBOSITY.STFU,
-        [ROUND_STAGE.SubBytes]: LOG_VERBOSITY.STFU,
-        [ROUND_STAGE.AddRoundKey]: LOG_VERBOSITY.STFU,
-    };
+export function convertStringToHex(message: string): string {
+    return message
+        .split('')
+        .map(x => toHexString(x.charCodeAt(0), 2))
+        .join('');
+}
+
+// Yo massive shout out to Daniel Earwicker (amazing name btw) https://stackoverflow.com/a/60435654
+export function convertHexToString(hexMessage: string): string {
+    return hexMessage
+        .split(/(\w\w)/g)
+        .filter(x => !!x)
+        .map(x => String.fromCharCode(parseInt(x, 16)))
+        .join('');
 }
