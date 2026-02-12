@@ -90,6 +90,30 @@ export function convertBigIntegerToWordArray(value: bigint): bigint[] {
     return result.reverse(); // Cheeky, ano...
 }
 
+export function gmul(value: number, multiplier: number): number {
+    switch (multiplier) {
+        case 1: return value;
+        case 2: return gmul2(value);
+        case 3: return gmul3(value);
+        default: return value;
+    }
+}
+
+export function gmul2(value: number): number {
+    value <<= 1;
+
+    if (value > 0xFF)
+        value ^= 0x11B;
+
+    return value;
+}
+
+export function gmul3(value: number): number {
+    return gmul2(value) ^ value;
+}
+
+
+
 function getCurrentBase2(value: bigint): number {
     let bitCount: number = 0;
     while (value > 0) {

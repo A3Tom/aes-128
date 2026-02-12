@@ -36,7 +36,7 @@ class AES(EncryptionBase):
     # https://crypto.stackexchange.com/questions/20/what-are-the-practical-differences-between-256-bit-192-bit-and-128-bit-aes-enc/1527#1527
     def _encrypt_block(self, block: bytes) -> bytes:
         prev_block = block
-        prev_block = 66814286504060421741230023322616923956 # known test value
+        # prev_block = 66814286504060421741230023322616923956 # known test value
         prev_block = self.__add_round_key(prev_block, self.key)
         print(f"[r_0-rk] {prev_block:032X}")
 
@@ -95,10 +95,10 @@ class AES(EncryptionBase):
             self.__round_keys[round] = round_key
             previous_block = round_key
         
-        # print(f"Key: {self.key:032X} produces expanded key schedule:")
+        print(f"Key: {self.key:032X} produces expanded key schedule:")
 
-        # for round in range(self.__rounds):
-        #     print(f"R{round + 1:02}: {self.__round_keys[round]:032X}")
+        for round in range(self.__rounds):
+            print(f"R{round + 1:02}: {self.__round_keys[round]:032X}")
         
 
     def __add_round_key(self, block: bytes, round_key: bytes):
