@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <models/aes_config.h>
 
-const char* CONFIG_BORDER = "**************************************************************";
+const char* CONFIG_BORDER = "\n**************************************************************\n";
 
 void print_border() { printf("%s", CONFIG_BORDER); }
 
 void print_configuration(AESConfig* cfg, char* message) {
     print_border();
     printf("  Alg: %s AES-%i (%i rounds)\n", config_mode_of_op_str(cfg), config_key_size_short(cfg), config_encryption_rounds(cfg));
-    printf("  Key: %s", config_key(cfg));
-    printf("  Hex: ------------");
-    printf("  Msg: %s", message);
+    printf("  Key: %s\n", config_key_str(cfg));
+    printf("  Hex: ------------\n");
+    printf("  Msg: %s\n", message);
     print_border();
 }
 

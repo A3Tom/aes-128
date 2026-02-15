@@ -1,6 +1,8 @@
 #ifndef AES_CONFIG_H
 #define AES_CONFIG_H
 
+#include <stdint.h>
+
 typedef enum {
     MODE_OF_OP_ECB = 0,
     MODE_OF_OP_CBC,
@@ -21,14 +23,15 @@ typedef enum {
 
 typedef struct AESConfig AESConfig;
 
-AESConfig*          load_configuration(char* key);
+AESConfig*          load_configuration(uint8_t* key);
 void                gtfo(AESConfig* config);
 
 ModeOfOperation     config_mode_of_op(const AESConfig* config);
 KeySize             config_key_size(const AESConfig* config);
 LogLevel            config_log_level(const AESConfig* config);
+uint8_t*            config_key(const AESConfig * config);
 
-char*               config_key(const AESConfig * config);
+char*               config_key_str(const AESConfig * config);
 char*               config_mode_of_op_str(const AESConfig * config);
 unsigned short      config_key_size_short(const AESConfig * config);
 unsigned short      config_encryption_rounds(const AESConfig * config);
