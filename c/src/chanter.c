@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <models/aes_config.h>
+#include <models/aes_args.h>
 
 const char* CONFIG_BORDER = "\n**************************************************************\n";
 
 void print_border() { printf("%s", CONFIG_BORDER); }
 
-void print_configuration(AESConfig* cfg, char* message) {
+void print_configuration(AES_Config* cfg, char* message) {
     print_border();
     printf("  Alg: %s AES-%i (%i rounds)\n", config_mode_of_op_str(cfg), config_key_size_short(cfg), config_encryption_rounds(cfg));
     printf("  Key: %s\n", config_key_str(cfg));
@@ -28,4 +29,10 @@ void print_overview() {
     printf("   4.1: Sub Bytes\n");
     printf("   4.2: Shift Rows\n");
     printf("   4.3: Add Round Key\n");
+}
+
+void print_args(AES_Args* args) {
+    print_border();
+    printf(" message: %s\n", args->message);
+    print_border();
 }

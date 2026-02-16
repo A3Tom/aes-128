@@ -7,7 +7,7 @@
 const unsigned short WORD_SIZE = 32;
 const unsigned short BLOCK_SIZE = 8;
 
-struct AESConfig {
+struct AES_Config {
     uint8_t*            key;
     ModeOfOperation     mode_of_operation;
     KeySize             key_size;
@@ -54,8 +54,8 @@ char* mode_of_op_to_string(ModeOfOperation mode_of_op) {
 }
 
 // TODO: Implement loading fae file
-AESConfig* load_configuration(uint8_t * key) {
-    AESConfig* config = malloc(sizeof *config);
+AES_Config* load_configuration(uint8_t * key) {
+    AES_Config* config = (AES_Config*)malloc(sizeof *config);
 
     config->key = key;
     config->word_size = WORD_SIZE;
@@ -67,6 +67,7 @@ AESConfig* load_configuration(uint8_t * key) {
 
     config->encryption_rounds = calculate_key_rounds(config->key_size);
     config->key_size_short = key_size_to_short(config->key_size);
+    config->mode_of_operation_str = mode_of_op_to_string(config->mode_of_operation);
 
     char ascii_buffer[4*16 + 1];
     bytes_to_ascii_printable(key, 16, ascii_buffer);
@@ -75,20 +76,20 @@ AESConfig* load_configuration(uint8_t * key) {
     return config;
 }
 
-void gtfo(AESConfig * config) {
+void gtfo(AES_Config * config) {
     if (!config) return;
 
     free(config);
 }
 
-ModeOfOperation config_mode_of_op(const AESConfig * config) { return config -> mode_of_operation; }
-KeySize config_key_size(const AESConfig * config) { return config -> key_size; }
-LogLevel config_log_level(const AESConfig * config) { return config -> log_level; }
-uint8_t* config_key(const AESConfig * config) { return config -> key; }
+ModeOfOperation config_mode_of_op(const AES_Config * config) { return config -> mode_of_operation; }
+KeySize config_key_size(const AES_Config * config) { return config -> key_size; }
+LogLevel config_log_level(const AES_Config * config) { return config -> log_level; }
+uint8_t* config_key(const AES_Config * config) { return config -> key; }
 
-char* config_key_str(const AESConfig * config) { return config -> key_str; }
-char* config_mode_of_op_str(const AESConfig * config) { return config -> mode_of_operation_str; }
-unsigned short config_key_size_short(const AESConfig * config) { return config -> key_size_short; }
-unsigned short config_encryption_rounds(const AESConfig * config) { return config -> encryption_rounds; }
-unsigned short config_word_size(const AESConfig * config) { return config -> word_size; }
-unsigned short config_block_size(const AESConfig * config) { return config -> block_size; }
+char* config_key_str(const AES_Config * config) { return config -> key_str; }
+char* config_mode_of_op_str(const AES_Config * config) { return config -> mode_of_operation_str; }
+unsigned short config_key_size_short(const AES_Config * config) { return config -> key_size_short; }
+unsigned short config_encryption_rounds(const AES_Config * config) { return config -> encryption_rounds; }
+unsigned short config_word_size(const AES_Config * config) { return config -> word_size; }
+unsigned short config_block_size(const AES_Config * config) { return config -> block_size; }
