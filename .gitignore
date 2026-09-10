@@ -8,3 +8,7 @@ dist
 
 # C
 c/build
+
+# C Sharp
+bin/
+obj/
