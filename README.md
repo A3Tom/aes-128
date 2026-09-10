@@ -18,6 +18,8 @@ I might tackle adding the flexability of Rijndael's variable block size at some 
 :-: | :-: | :-- 
 Python | [README](./python/README.md) | :star::star::snake::snake::rocket:
 Node | [README](./node/README.md) | N/a
+C | [README](./c/README.md) | N/a
+C# | [README](./csharp/README.md) | N/a
 
 
 ## Acknowledgements and Resources
