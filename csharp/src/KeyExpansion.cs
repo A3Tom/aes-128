@@ -9,10 +9,10 @@ public static class KeyExpansion
         var roundIndex = round - 1;
         var rkey = 0x01 << roundIndex;
         
-        if (rkey > 0xFF)
+        if (rkey > Constants.BYTE_MASK)
         {
-            rkey ^= 0x11B;
-            rkey &= 0xFF;
+            rkey ^= Constants.GF_POLYNOMIAL;
+            rkey &= Constants.BYTE_MASK;
             rkey <<= roundIndex % 8;
         }
 
