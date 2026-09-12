@@ -17,10 +17,11 @@ public sealed class KeyExpansionTests
     [InlineData(8,  0x80)]
     [InlineData(9,  0x1B)]
     [InlineData(10, 0x36)]
-    public void GivenValidRoundKey_CalculateRoundKey_ReturnsExpectedByteResult(int round, byte expected)
+    public void GivenValidRoundKey_CalculateRoundConstant_ReturnsExpectedByteResult(int round, byte roundConstant)
     {
-        var actual = KeyExpansion.CalculateRoundKey(round);
+        byte[] expected = [roundConstant, 00, 00, 00];
+        var actual = KeyExpansion.CalculateRoundConstant(round);
 
-        actual.Should().Be(expected);
+        actual.Should().Equal(expected);
     }
 }
