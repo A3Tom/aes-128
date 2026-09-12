@@ -23,6 +23,24 @@ public sealed class BitOperationTests
 
         actual.Should().Equal(expected);
     }
+
+    [Theory]
+    [ClassData(typeof(BitOperationSubBytesData))]
+    public void GivenAByteArray_SubBytes_ReturnsSubbedBytes(byte[] bytes, byte[] expected)
+    {
+        BitOperation.SubBytes(bytes);
+
+        bytes.Should().Equal(expected);
+    }
+
+    [Theory]
+    [ClassData(typeof(BitOperationSubBytesData))]
+    public void GivenAByteArray_SubBytesInverse_ReturnsSubbedBytes(byte[] bytes, byte[] expected)
+    {
+        BitOperation.SubBytesInverse(bytes);
+
+        bytes.Should().Equal(expected);
+    }
 }
 
 public class BitOperationRotWordData : TheoryData<byte[], byte[]>
@@ -66,5 +84,14 @@ public class BitOperationGetColumnData : TheoryData<byte[], int, byte[]>
         Add(_block, 1, _expected_col_b);
         Add(_block, 2, _expected_col_c);
         Add(_block, 3, _expected_col_d);
+    }
+}
+
+public class BitOperationSubBytesData : TheoryData<byte[], byte[]>
+{
+    public BitOperationSubBytesData()
+    {
+        Add([.. Constants.SBox.Values], [.. Constants.SBoxInv.Values]);
+        Add([.. Constants.SBoxInv.Values], [.. Constants.SBox.Values]);
     }
 }

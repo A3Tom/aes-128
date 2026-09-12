@@ -16,4 +16,16 @@ public static class BitOperation
       block[8 + columnIndex],
       block[12 + columnIndex]
     ];
+
+    public static void SubBytes(byte[] bytes)
+    {
+        for (int i = 0; i < bytes.Length; i++)
+            bytes[i] = Constants.SBox[bytes[i]];
+    }
+
+    public static void SubBytesInverse(byte[] bytes)
+    {
+        for (int i = 0; i < bytes.Length; i++)
+            bytes[i] = Constants.SBoxInv[bytes[i]];
+    }
 }
