@@ -13,7 +13,7 @@ public sealed class GFSBoxTests
     [InlineData("00", "cb9fceec81286ca3e989bd979b0cb284", "92beedab1895a94faa69b632e5cc47ce")]
     [InlineData("00", "b26aeb1874e47ca8358ff22378f09144", "459264f4798f6a78bacb89c15ed3d601")]
     [InlineData("00", "58c8e00b2631686d54eab84b91f0aca1", "08a4e2efec8a8e3312ca7460b9040bbf")]
-    public void Hings(string key, string plaintext, string ciphertext)
+    public void GivenValidPlainText_GFSBox_ReturnsExpectedCipherText(string key, string plaintext, string ciphertext)
     {
         var keyBytes = Convert.FromHexString(key);
         var plaintextBytes = Convert.FromHexString(plaintext);
