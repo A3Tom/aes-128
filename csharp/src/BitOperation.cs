@@ -7,13 +7,6 @@ public static class BitOperation
         var wrappedWord = word[0];
 
         for (int i = 0; i < word.Length; i++)
-        {
-            var fwIdx = i + 1;
-
-            if (fwIdx < word.Length)
-                word[i] = word[fwIdx];
-            else
-                word[i] = wrappedWord;
-        }
+            word[i] = (i + 1 < word.Length) ? word[i + 1] : wrappedWord;
     }
 }
