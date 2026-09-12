@@ -14,6 +14,15 @@ public sealed class BitOperationTests
         
         word.Should().Equal(expected);
     }
+
+    [Theory]
+    [ClassData(typeof(BitOperationGetColumnData))]
+    public void WhenAnInRangeIndexIsGiven_GetColumn_ReturnsCorrectColumnArray(byte[] block, int columnIndex, byte[] expected)
+    {
+        var actual = BitOperation.GetColumn(block, columnIndex);
+
+        actual.Should().Equal(expected);
+    }
 }
 
 public class BitOperationRotWordData : TheoryData<byte[], byte[]>
@@ -34,5 +43,28 @@ public class BitOperationRotWordData : TheoryData<byte[], byte[]>
         Add(_word_b, _expected_b);
         Add(_word_c, _expected_c);
         Add(_word_d, _expected_d);
+    }
+}
+
+public class BitOperationGetColumnData : TheoryData<byte[], int, byte[]>
+{
+    private static readonly byte[] _block = [
+        1,  2,  3,  4,
+        5,  6,  7,  8,
+        9,  10, 11, 12,
+        13, 14, 15, 16
+    ];
+
+    private static readonly byte[] _expected_col_a = [1, 5, 9,  13];
+    private static readonly byte[] _expected_col_b = [2, 6, 10, 14];
+    private static readonly byte[] _expected_col_c = [3, 7, 11, 15];
+    private static readonly byte[] _expected_col_d = [4, 8, 12, 16];
+
+    public BitOperationGetColumnData()
+    {
+        Add(_block, 0, _expected_col_a);
+        Add(_block, 1, _expected_col_b);
+        Add(_block, 2, _expected_col_c);
+        Add(_block, 3, _expected_col_d);
     }
 }
