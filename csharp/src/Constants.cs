@@ -3,6 +3,13 @@ public static class Constants
     public const ushort GF_POLYNOMIAL = 0x11B;
     public const ushort BYTE_MASK = 0xFF;
     public const uint WORD_MASK = 0xFFFFFFFF;
+
+    public static readonly byte[] EMPTY_BLOCK = [
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        0, 0, 0, 0
+    ];
     
     public static readonly Dictionary<byte, byte> SBox = new()
     {
