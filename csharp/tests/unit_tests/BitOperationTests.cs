@@ -25,6 +25,15 @@ public sealed class BitOperationTests
     }
 
     [Theory]
+    [ClassData(typeof(BitOperationSetColumnData))]
+    public void WhenAnInRangeIndexIsGiven_SetColumn_ReturnsCorrectColumnArray(byte[] block, int columnIndex, byte[] newColumn, byte[] expected)
+    {
+        BitOperation.SetColumn(block, columnIndex, newColumn);
+
+        block.Should().Equal(expected);
+    }
+
+    [Theory]
     [ClassData(typeof(BitOperationSubBytesData))]
     public void GivenAByteArray_SubBytes_ReturnsSubbedBytes(byte[] bytes, byte[] expected)
     {
@@ -34,7 +43,7 @@ public sealed class BitOperationTests
     }
 
     [Theory]
-    [ClassData(typeof(BitOperationSubBytesData))]
+    [ClassData(typeof(BitOperationSubBytesInverseData))]
     public void GivenAByteArray_SubBytesInverse_ReturnsSubbedBytes(byte[] bytes, byte[] expected)
     {
         BitOperation.SubBytesInverse(bytes);
@@ -87,11 +96,65 @@ public class BitOperationGetColumnData : TheoryData<byte[], int, byte[]>
     }
 }
 
+public class BitOperationSetColumnData : TheoryData<byte[], int, byte[], byte[]>
+{
+    private static readonly byte[] _block = [
+        1,  2,  3,  4,
+        5,  6,  7,  8,
+        9,  10, 11, 12,
+        13, 14, 15, 16
+    ];
+    
+    private static readonly byte[] _expected_block_a = [
+        0,  2,  3,  4,
+        0,  6,  7,  8,
+        0,  10, 11, 12,
+        0,  14, 15, 16
+    ];
+    private static readonly byte[] _expected_block_b = [
+        1,  0,  3,  4,
+        5,  0,  7,  8,
+        9,  0,  11, 12,
+        13, 0,  15, 16
+    ];
+    private static readonly byte[] _expected_block_c = [
+        1,  2,  0,  4,
+        5,  6,  0,  8,
+        9,  10, 0,  12,
+        13, 14, 0,  16
+    ];
+    private static readonly byte[] _expected_block_d = [
+        1,  2,  3,  0,
+        5,  6,  7,  0,
+        9,  10, 11, 0,
+        13, 14, 15, 0
+    ];
+
+    private static readonly byte[] _new_column = [0, 0, 0, 0];
+
+    public BitOperationSetColumnData()
+    {
+        Add(_block, 0, _new_column, _expected_block_a);
+        Add(_block, 1, _new_column, _expected_block_b);
+        Add(_block, 2, _new_column, _expected_block_c);
+        Add(_block, 3, _new_column, _expected_block_d);
+    }
+}
+
 public class BitOperationSubBytesData : TheoryData<byte[], byte[]>
 {
     public BitOperationSubBytesData()
     {
-        Add([.. Constants.SBox.Values], [.. Constants.SBoxInv.Values]);
+        Add([.. Constants.SBox.Keys], [.. Constants.SBoxInv.Values]);
         Add([.. Constants.SBoxInv.Values], [.. Constants.SBox.Values]);
+    }
+}
+
+public class BitOperationSubBytesInverseData : TheoryData<byte[], byte[]>
+{
+    public BitOperationSubBytesInverseData()
+    {
+        Add([.. Constants.SBox.Values], [.. Constants.SBoxInv.Values]);
+        Add([.. Constants.SBoxInv.Keys], [.. Constants.SBox.Values]);
     }
 }
