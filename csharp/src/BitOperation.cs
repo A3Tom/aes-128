@@ -34,7 +34,13 @@ public static class BitOperation
         block[12 + columnIndex] = column[3];
     }
 
-    public static byte[] GetRow(byte[] block, int rowIndex) => block[(rowIndex * 4)..((rowIndex * 4) + 3)];
+    public static byte[] GetRow(byte[] block, int rowIndex) => block[(rowIndex * 4)..((rowIndex + 1) * 4)];
+
+    public static void SetRow(byte[] block, int rowIndex, byte[] row)
+    {
+        for (int i = 0; i < row.Length; i++)
+            block[(rowIndex * 4) + i] = row[i];
+    }
 
     public static void SubBytes(byte[] bytes)
     {
