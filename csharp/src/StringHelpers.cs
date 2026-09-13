@@ -11,8 +11,8 @@ public static class StringHelpers
             result <<= 8; 
             result |= bytes[i];
         }
-        
-        string format = $"X{Math.Floor(bytes.Length / 8d) * 8}";
+
+        string format = $"x{Math.Floor(bytes.Length / 8d) * 8}";
         return $"{result.ToString(format)}";
     }
 }
