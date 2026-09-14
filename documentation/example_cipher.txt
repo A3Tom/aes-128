@@ -1,0 +1,58 @@
+Round 1
+Substitution    090862bf 6f28e304 2c747fee da4a6a47 
+ShiftRow        09287f47 6f746abf 2c4a6204 da08e3ee 
+MixColumn       529f16c2 978615ca e01aae54 ba1a2659 
+KeyAddition     f265e8d5 1fd2397b c3b9976d 9076505c
+                 
+Round 2         
+Substitution    894d9b03 c0b51221 2e56883c 6038534a 
+ShiftRow        89b5884a c0565303 2e389b21 604d123c 
+MixColumn       0f31e929 319a3558 aec95893 39f04d87 
+KeyAddition     fdf37cdb 4b0c8c1b f7fcd8e9 4aa9bbf8 
+                 
+Round 3          
+Substitution    540d10b9 b3fe64af 68b0611e d6d3ea41 
+ShiftRow        54fe6141 b3b0eab9 68d310af d60d641e 
+MixColumn       9151abe1 e5541cfd 014a713e da7e3134 
+KeyAddition     acd1ec9c a242e2c3 1f690f7a b704b90f
+                 
+Round 4          
+Substitution    913ecede 3a2c982e c0f976da a9f25676 
+ShiftRow        912c7676 3af956de c0f2ce2e a93e98da 
+MixColumn       4d25cb1e ecf71646 7658c73b 49bcc9e9 
+KeyAddition     a2616e5f 44a54d39 c029e200 92b764e9 
+                 
+Round 5          
+Substitution    3aef9fcf 1b06e312 baa59863 4fa9431e 
+ShiftRow        3a06981e 1ba543cf baa99f12 4fefe363 
+MixColumn       f89b35ec 4e40724e 025b00c7 34d7d81b 
+KeyAddition     2c4af314 32c3efc9 c8a9b87b 252ecda7 
+                 
+Round 6          
+Substitution    71d60dfa 232edfdd e8d36c21 3f31bd5c 
+ShiftRow        712e6c5c 23d3bdfa e8310ddd 3fd6df21 
+MixColumn       a0c56369 6fb884e4 4840bfbe e1d32f0a 
+KeyAddition     cd4dc013 7eb3ba19 93b939ff 2bd3bcf7 
+                 
+Round 7          
+Substitution    bde3ba7d f36df4d4 dc561216 f1666568 
+ShiftRow        bd6d1268 f356657d dc66bad4 f1e3f416 
+MixColumn       ac394c73 1f8de8c7 6711b210 253ddb33 
+KeyAddition     e26dbb7d 40d22134 e3b7fda2 6b9b077c 
+                 
+Round 8          
+Substitution    983ceaff 09b5fd18 11a9543a 7f14c510 
+ShiftRow        98b55410 09a9c5ff 1114ea18 7f3cfd3a 
+MixColumn       ab05b572 c8eb2b92 ec04e2fd 7d21ec34 
+KeyAddition     41d7c653 7d669140 dd2f179d 02acc51b
+                 
+Round 9          
+Substitution    830eb4ed ff338109 c115f05e 7791a6af 
+ShiftRow        8333f0af ff15a6ed c191b409 770e815e 
+MixColumn       1741a118 91c99168 8c36386f 23ad82aa 
+KeyAddition     bb36c7eb 88334d49 a4e7112e 74f182c4 
+                 
+End              
+Substitution    ea05c6e9 c4c3e33b 49948231 92a1131c 
+ShiftRow        eac3821c c49413e9 49a1c63b 9205e331 
+KeyAddition     3ad77bb4 0d7a3660 a89ecaf3 2466ef97

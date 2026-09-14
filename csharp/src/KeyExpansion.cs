@@ -1,5 +1,3 @@
-using System.Reflection.Metadata;
-
 namespace aes128;
 
 public static class KeyExpansion
