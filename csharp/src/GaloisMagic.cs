@@ -1,25 +1,31 @@
 namespace aes128;
 
-public class GaloisFunctions
+public static class GaloisFunctions
 {
-    public static int GMul(int ogInt, int multiplicator)
+    public static int GMul(byte a, int multiplier)
     {
-        if (multiplicator == 1)
-            return ogInt;
-        else if (multiplicator == 2)
-            return GMul2(ogInt);
+        if (multiplier == 1)
+            return a;
+        else if (multiplier == 2)
+            return GMul2(a);
         
-        var result = ogInt;
-        for (int i = 0; i < Math.Floor(multiplicator / 2d); i++)
+        var result = a;
+        for (int i = 0; i < Math.Floor(multiplier / 2d); i++)
             result = GMul2(result);
         
-        if (multiplicator % 2 == 1)
-            result ^= ogInt;
+        if (multiplier % 2 == 1)
+            result ^= a;
         
         return result;
     }
 
-    private static int GMul2(int og_int) => (og_int <<= 1) <= Constants.BYTE_MASK 
-        ? og_int 
-        : og_int ^= Constants.GF_POLYNOMIAL;
+    public static byte GMul2(byte a){ 
+        bool fieldOverflow = (a & 0b1000_0000) == 1;
+        a <<= 1;
+
+        if (fieldOverflow)
+            a ^= Constants.GF_POLYNOMIAL;
+
+        return a;
+    }
 }

@@ -6,7 +6,7 @@ namespace tests.unit_tests;
 public class AESCoreTests
 {
     [Theory]
-    [ClassData(typeof(AESCoreShiftRowsData))]
+    [ClassData<AESCoreShiftRowsData>]
     public void GivenABlock_ShiftRows_RotatesTheCorrectRow(string input, string expectedString)
     {
         var actual = Convert.FromHexString(input);

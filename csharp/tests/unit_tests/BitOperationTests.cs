@@ -7,7 +7,7 @@ namespace tests.unit_tests;
 public sealed class BitOperationTests
 {
     [Theory]
-    [ClassData(typeof(BitOperationRotWordData))]
+    [ClassData<BitOperationRotWordData>]
     public void WhenAValidWordIsPassed_RotWord_ReturnsByteArrayRotatedBy1(byte[] word, byte[] expected)
     {
         BitOperation.RotWord(word);
@@ -16,7 +16,7 @@ public sealed class BitOperationTests
     }
 
     [Theory]
-    [ClassData(typeof(BitOperationGetColumnData))]
+    [ClassData<BitOperationGetColumnData>]
     public void WhenAnInRangeIndexIsGiven_GetColumn_ReturnsCorrectColumnArray(byte[] block, int columnIndex, byte[] expected)
     {
         var actual = BitOperation.GetColumn(block, columnIndex);
@@ -25,7 +25,7 @@ public sealed class BitOperationTests
     }
 
     [Theory]
-    [ClassData(typeof(BitOperationSetColumnData))]
+    [ClassData<BitOperationSetColumnData>]
     public void WhenAnInRangeIndexIsGiven_SetColumn_ReturnsCorrectColumnArray(byte[] block, int columnIndex, byte[] newColumn, byte[] expected)
     {
         byte[] actual = [..block];
@@ -35,7 +35,7 @@ public sealed class BitOperationTests
     }
 
     [Theory]
-    [ClassData(typeof(BitOperationSubBytesData))]
+    [ClassData<BitOperationSubBytesData>]
     public void GivenAByteArray_SubBytes_ReturnsSubbedBytes(string bytes, string expected)
     {
         byte[] actual = Convert.FromHexString(bytes);
@@ -45,7 +45,7 @@ public sealed class BitOperationTests
     }
 
     [Theory]
-    [ClassData(typeof(BitOperationSubBytesInverseData))]
+    [ClassData<BitOperationSubBytesInverseData>]
     public void GivenAByteArray_SubBytesInverse_ReturnsSubbedBytes(string bytes, string expected)
     {
         byte[] actual = Convert.FromHexString(bytes);

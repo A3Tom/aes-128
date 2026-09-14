@@ -46,7 +46,7 @@ public class AESCore
     // but will deal with "columns" the way we would normally expect a column to be
     public static void ShiftRows(byte[] block)
     {
-        for (int row = 0; row < block.Length; row++)
+        for (int row = 0; row < (block.Length / 4); row++)
         {
             var rowBytes = BitOperation.GetColumn(block, row);
 

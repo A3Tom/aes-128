@@ -1,7 +1,7 @@
 public static class Constants
 {
-    public const ushort GF_POLYNOMIAL = 0x11B;
-    public const ushort BYTE_MASK = 0xFF;
+    public const byte GF_POLYNOMIAL = 0x1B;
+    public const byte BYTE_MASK = 0xFF;
     public const uint WORD_MASK = 0xFFFFFFFF;
 
     public const int ENCRYPTION_ROUNDS = 9;
